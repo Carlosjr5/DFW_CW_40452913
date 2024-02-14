@@ -1,0 +1,235 @@
+/* General Styles */
+body {
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.bw-mode {
+    background-color: #333333;
+    color: aliceblue;
+}
+
+body:not(.bw-mode) {
+    background-color: #f8f9fa;
+    color: #333333;
+}
+
+/* NAV BAR */
+.Navbar {
+
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: relative;
+    border-bottom: 7px solid #D9D9D9;
+    margin-right: 300px;
+}
+
+
+.nav-link {
+    color: #8F8282;
+    font-size: 15px;
+    font-family: Inter;
+    word-wrap: break-word;
+    text-decoration: none;
+}
+
+    .nav-link:hover {
+        color: #AA8484;
+    }
+
+    .nav-link.active {
+        color: #AA8484;
+    }
+
+/* Create Petition */
+.container {
+    margin-top: 50px;
+}
+
+.petition-form {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    resize: both;
+    overflow: auto;
+    width: 438px;
+    height: 484px;
+}
+
+.form-group {
+    margin-top: 23px;
+    margin-bottom: 40px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s;
+    margin-top: 5%;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+.bw-mode .petition-details {
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
+}
+
+/* All Petitions */
+allbody {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+allmain {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 50px;
+}
+
+
+
+/*All Petitions*/
+
+.petition-item {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: min-height 0.3s ease;
+    overflow: auto; /* overflow: hidden to contain floated elements */
+    min-height: 150px; /* Initial height */
+}
+
+    .petition-item:hover {
+        min-height: 400px; /* Expanded height when hovered */
+    }
+
+    .petition-item .Image {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        margin-bottom: 23px;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        margin-top: 23px;
+    }
+
+    .petition-item .PetitionTitle {
+        font-size:23px;
+        padding: 10px;
+        margin-bottom: 23px;
+    }
+
+    .petition-item .Description {
+        width: calc(100% - 186px);
+        margin-left: 90px;
+        opacity: 0; /* Initially hide the description */
+        transition: opacity 0.3s ease;
+        overflow: hidden; /* Hide overflowing content */
+        max-height: 0; /* Initially hide the description */
+        transition: max-height 0.3s ease; /* Add transition for smooth animation */
+    }
+
+    .petition-item:hover .Description {
+        opacity: 1; /* Reveal the description when the petition item is hovered */
+        max-height: 100%; /* Expand the description height */
+    }
+
+    .petition-item .VoteYes {
+        right: 30px;
+        padding: 5px 10px;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1; /*button above other content */
+    }
+
+        .petition-item .VoteYes .Yes {
+            width: 35px;
+            height: 38.5px;
+            margin: 6px;
+            background: rgba(0, 154, 15, 0.47);
+            border: 1px solid rgba(0, 87, 19, 0.64);
+            border-radius: 4px;
+        }
+
+    .petition-item .Voters {
+        width: 186px;
+        height: 27px;
+    }
+
+
+    .petition-item .ShareButton {
+        margin-top: 2%;
+        right: 30px;
+        padding: 5px 10px;
+        background-color: darkslategrey;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1; /*button above other content */
+    }
+
+
+/* Footer Styles */
+
+
+.cfooter {
+    position: relative;
+    margin-left: 42%;
+    margin-top: 17%;
+}
+
+.apfooter {
+    position: relative;
+    margin-left: 42%;
+    margin-top:29%;
+}
+
+.contactfooter {
+    position: relative;
+    margin-top: 50%;
+}
+
+
+
+/*Admin Delete Petition Btn */
+
+.petition-item .DeleteButton {
+    top: 10px;
+    right: 190px;
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1; /*button above other content */
+}
+
+    .petition-item .DeleteButton:hover {
+        background-color: #c82333;
+    }

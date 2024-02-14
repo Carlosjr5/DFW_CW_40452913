@@ -1,0 +1,147 @@
+﻿@{
+    var isAdmin = User.IsInRole("admin");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="style.css">
+    @if (isAdmin)
+    {
+        <h1>Hi Admin!</h1>
+    }
+    else
+    {
+        <h1>Welcome User,</h1>
+        <h2>Here all the current iPétitions!</h2>
+    }
+</head>
+
+<body>
+    <allmain aria-labelledby="title">
+        <div class="allpetition-details">
+            <div id="petitionsList"></div>
+        </div>
+    </allmain>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to set a cookie
+            function setCookie(name, value, days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+
+            // Function to get a cookie
+            function getCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            var samplePetitions = [
+                {
+                    Title: 'Save the Environment',
+                    Description: 'Support initiatives to save our planetSupport initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!. Act nowsdsdsdsdsdd!',
+                    ImageUrl: 'https://imgs.search.brave.com/hf6uk11diK0bOyJ8ohzWIYQeSPh4AGX3jM6goZcVvfQ/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/Y29uc2VydmUtZW5l/cmd5LWZ1dHVyZS5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MTQvMDYvcG9sbHV0/aW9uLmpwZw',
+                    DateCreated: '2024-02-10T10:30:00'
+                },
+                {
+                    Title: 'Equal Education for All',
+                    Description: 'Ensure every child has access to quality education.',
+                    ImageUrl: 'https://imgs.search.brave.com/NiDY9qZE7F0boKkik7nPB_tcbpqSMNfygzYhMDpLC-k/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA0LzIyLzk0LzYy/LzM2MF9GXzQyMjk0/NjIyNV9md0FMS3hQ/Smc1SHRRTWtjYjVE/VnV5Q1dQWVNNTkgz/cy5qcGc',
+                    DateCreated: '2024-02-11T15:45:00'
+                },
+                {
+                    Title: 'STOP WAR!',
+                    Description: 'No more world war, set guns down!, START NOW!.',
+                    ImageUrl: 'https://imgs.search.brave.com/2cI_UPuw6VTmxb42_mKuKfUT7doXvmz8TB-eaUcGlPM/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNTEy/ODEwNzg0L3Bob3Rv/L3dvcmxkLXdhci1p/aS1zb2xkaWVycy1s/b29raW5nLWZvci10/aGUtZW5lbXkuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPTYx/ZXNZVE56a1R1eG5w/TEo3bmNVT3dUekxw/VjdJeVdRb2VZY1I4/Q3hIclE9',
+                    DateCreated: '2024-02-12T15:45:00'
+                }
+            ];
+
+            var petitionsList = document.getElementById('petitionsList');
+            //Check for admin.
+            var isAdmin = @isAdmin.ToString().ToLower();
+
+            // Check if the user has already voted
+            var hasVoted = getCookie('voted');
+
+            samplePetitions.forEach(petition => {
+                var petitionItem = document.createElement('div');
+                petitionItem.classList.add('petition-item');
+
+                var formattedDate = new Date(petition.DateCreated).toLocaleString();
+
+                petitionItem.innerHTML = `
+                            <div class="Image">
+                              <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
+                            </div>
+                            <div class="PetitionTitle">${petition.Title}</div>
+                            <div class="Description">${petition.Description}</div>
+                            <button class="ShareButton">Share</button>
+                       
+
+                            <div class="VoteYes">
+                                <button class="YesButton">${hasVoted ? 'Voted' : 'Yes'}</button>
+                                <div class="Counter">${hasVoted ? '1' : '0'}</div> <!-- Counter Element -->
+                            </div>
+                        @if (isAdmin)
+                        {
+                                                <button class="DeleteButton">Delete</button>
+                        }
+             
+                        `;
+
+                petitionsList.appendChild(petitionItem);
+
+                // Add event listener to vote button if the user has not already voted
+                if (!hasVoted) {
+                    var yesButton = petitionItem.querySelector('.YesButton');
+                    yesButton.addEventListener('click', function () {
+                        var counter = this.nextElementSibling;
+                        var count = parseInt(counter.textContent) + 1;
+                        counter.textContent = count;
+                        setCookie('voted', 'true', 365); // Set cookie to indicate that the user has voted
+                        this.textContent = 'Voted'; // Change button text to indicate that the user has voted
+                        this.disabled = true; // Disable the button after voting
+                    });
+                }
+
+                // Add event listener to delete button if the user is an admin
+                if (isAdmin) {
+                    var deleteButton = petitionItem.querySelector('.DeleteButton');
+                    deleteButton.addEventListener('click', function () {
+                        // You can implement the logic to delete the petition here
+                        // For simplicity, I'll just remove the petition item from the DOM
+                        petitionItem.remove();
+                    });
+                }
+            });
+        });
+    </script>
+
+  
+  
+
+    <footer class="apfooter">
+        &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </footer>
+
+</body>
+
+</html>

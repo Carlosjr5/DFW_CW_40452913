@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DFW_CW_40452913</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DFW_CW_40452913.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+     
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+         
+            <div class="container-fluid">
+          
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">iPétition</a>
+              
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="modeToggle">
+                    🌞
+                    🌜
+                </div>
+                <div class="Navbar">
+                  
+                            <a class="nav-link Home" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                       
+
+                            <a class="nav-link AllPetitions" asp-area="" asp-controller="Home" asp-action="About">All Petitions</a>
+                      
+                    
+                            <a class="nav-link Contact" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                        
+
+                            <a class="nav-link Privacy" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+              
+
+                   
+                </div>
+                <partial name="_LoginPartial" />
+            </div>
+        </nav>
+    </header>
+
+</body>
+
+
+
+
+    <div class="container">
+        <div class="min-height-container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var isBWMode = localStorage.getItem('bwMode') === 'true';
+
+            // Function to toggle between black and white mode
+            function toggleMode() {
+                var body = document.body;
+
+                if (body.classList.contains('bw-mode')) {
+                    body.classList.remove('bw-mode');
+                    modeToggle.innerHTML = '🌜';
+                    localStorage.setItem('bwMode', 'false'); 
+            } else {
+                    body.classList.add('bw-mode');
+                    modeToggle.innerHTML = '🌞'; 
+                    localStorage.setItem('bwMode', 'true'); 
+                }
+            }
+
+            // Initialize mode toggle based on stored state
+            if (isBWMode) {
+                toggleMode();
+            }
+
+            // Event listener for mode toggle
+            modeToggle.addEventListener('click', toggleMode);
+        });
+    </script>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+
+
+</html>
+
