@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var isAdmin = User.IsInRole("admin");
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,47 +13,55 @@
 </head>
 <body>
     <header>
-     
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-         
             <div class="container-fluid">
-          
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">iPétition</a>
-              
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
                 <div id="modeToggle">
-                    🌞
-                    🌜
+                    <img src="/images/toggle-off-solid.svg" alt="Off" width="23" height="23">
                 </div>
-                <div class="Navbar">
-                  
-                            <a class="nav-link Home" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                       
-
-                            <a class="nav-link AllPetitions" asp-area="" asp-controller="Home" asp-action="About">All Petitions</a>
-                      
-                    
-                            <a class="nav-link Contact" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
-                        
-
-                            <a class="nav-link Privacy" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <div class="Navbar-titulo">
+                    iPétition
+                </div>
               
+              
+                <div class="Navbar">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                   
+                            @if (!isAdmin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link Home" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link AllPetitions" asp-area="" asp-controller="Home" asp-action="About">Petitions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link Contact" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link Home" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link AllPetitions" asp-area="" asp-controller="Home" asp-action="About">Petitions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link Contact" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link Users" asp-area="" asp-controller="Admin" asp-action="AdminIndex">Users</a>
+                                </li>
+                            }
+
+                        </ul>
+                </div>
                 </div>
                 <partial name="_LoginPartial" />
             </div>
         </nav>
     </header>
-
-</body>
-
-
-
-
     <div class="container">
         <div class="min-height-container">
             <main role="main" class="pb-3">
@@ -58,11 +69,10 @@
             </main>
         </div>
     </div>
-
-    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var isBWMode = localStorage.getItem('bwMode') === 'true';
+            var modeToggle = document.getElementById('modeToggle');
 
             // Function to toggle between black and white mode
             function toggleMode() {
@@ -70,12 +80,12 @@
 
                 if (body.classList.contains('bw-mode')) {
                     body.classList.remove('bw-mode');
-                    modeToggle.innerHTML = '🌜';
-                    localStorage.setItem('bwMode', 'false'); 
-            } else {
+                    modeToggle.innerHTML = '<img src="/images/toggle-off-solid.svg" alt="Off" width="23" height="23">';
+                    localStorage.setItem('bwMode', 'false');
+                } else {
                     body.classList.add('bw-mode');
-                    modeToggle.innerHTML = '🌞'; 
-                    localStorage.setItem('bwMode', 'true'); 
+                    modeToggle.innerHTML = '<img src="/images/toggle-on-solid.svg" alt="On" width="23" height="23">';
+                    localStorage.setItem('bwMode', 'true');
                 }
             }
 
@@ -86,17 +96,13 @@
 
             // Event listener for mode toggle
             modeToggle.addEventListener('click', toggleMode);
+
+      
         });
     </script>
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
-
-
-
+</body>
 </html>
-

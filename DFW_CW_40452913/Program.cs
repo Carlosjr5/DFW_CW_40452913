@@ -1,3 +1,4 @@
+using DFW_CW_40452913.Controllers;
 using DFW_CW_40452913.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ public class Program
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         builder.Services.AddControllersWithViews();
-
+       
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -38,13 +39,19 @@ public class Program
 
         app.UseAuthorization();
 
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+            endpoints.MapControllerRoute(
+                name: "admin",
+                pattern: "{controller=Admin}/{action=About}/{id?}");
+        });
+
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern: "{controller=Home}/{action=About}/{id?}");
         app.MapRazorPages();
 
-
-        //Creating Roles for Admin and User
         using (var scope = app.Services.CreateScope())
         {
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -104,10 +111,13 @@ public class Program
 
                 // Output user's email and role
                 Console.WriteLine($"User: {user.Email}, Role: {string.Join(", ", roles)}");
-                
+
             }
         }
 
         app.Run();
     }
+
+
+
 }

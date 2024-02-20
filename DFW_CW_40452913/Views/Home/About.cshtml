@@ -1,6 +1,10 @@
 ﻿@{
     var isAdmin = User.IsInRole("admin");
+
+
 }
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,11 +16,11 @@
     <link rel="stylesheet" href="style.css">
     @if (isAdmin)
     {
-        <h1>Hi Admin!</h1>
+        <h1>Hi Admin!, @User.Identity?.Name</h1>
     }
     else
     {
-        <h1>Welcome User,</h1>
+        <h1>Welcome back!,</h1>
         <h2>Here all the current iPétitions!</h2>
     }
 </head>
@@ -25,6 +29,7 @@
     <allmain aria-labelledby="title">
         <div class="allpetition-details">
             <div id="petitionsList"></div>
+        
         </div>
     </allmain>
 
@@ -55,8 +60,8 @@
 
             var samplePetitions = [
                 {
-                    Title: 'Save the Environment',
-                    Description: 'Support initiatives to save our planetSupport initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!. Act nowsdsdsdsdsdd!',
+                    Title: 'Save the Envisdasdsadsadkjasbdkasjbdakjsbdkjasbdkjasbdkjabsdjkbasdronment',
+                    Description: 'Support initiatives to save our planetSupport initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!Support initiatives to save our planet. Act now!. Act nowsdsdsdsdsdd!',
                     ImageUrl: 'https://imgs.search.brave.com/hf6uk11diK0bOyJ8ohzWIYQeSPh4AGX3jM6goZcVvfQ/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/Y29uc2VydmUtZW5l/cmd5LWZ1dHVyZS5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MTQvMDYvcG9sbHV0/aW9uLmpwZw',
                     DateCreated: '2024-02-10T10:30:00'
                 },
@@ -88,24 +93,23 @@
                 var formattedDate = new Date(petition.DateCreated).toLocaleString();
 
                 petitionItem.innerHTML = `
-                            <div class="Image">
-                              <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
-                            </div>
-                            <div class="PetitionTitle">${petition.Title}</div>
-                            <div class="Description">${petition.Description}</div>
-                            <button class="ShareButton">Share</button>
-                       
-
-                            <div class="VoteYes">
-                                <button class="YesButton">${hasVoted ? 'Voted' : 'Yes'}</button>
-                                <div class="Counter">${hasVoted ? '1' : '0'}</div> <!-- Counter Element -->
-                            </div>
-                        @if (isAdmin)
-                        {
-                                                <button class="DeleteButton">Delete</button>
-                        }
-             
-                        `;
+                               
+                                    <div class="Image">
+                                      <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
+                                    </div>
+                                    <div class="PetitionTitle">${petition.Title}</div>
+                                    <div class="Description">${petition.Description}</div>
+                                    <div class="VoteYes">
+                                    <button class="ShareButton">Share</button>
+                                    <button class="YesButton">${hasVoted ? 'Voted' : 'Vote'}</button>
+                                    <div class="Counter">${hasVoted ? '1' : '0'}</div> <!-- Counter Element -->
+                                  </div>
+                              
+                                    @if (isAdmin)
+                                    {
+                                         <button class="DeleteButton">Delete</button>
+                                    }
+                                `;
 
                 petitionsList.appendChild(petitionItem);
 
@@ -133,10 +137,10 @@
                 }
             });
         });
-    </script>
 
-  
-  
+
+
+    </script>
 
     <footer class="apfooter">
         &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

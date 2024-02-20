@@ -65,3 +65,28 @@ public async Task < IActionResult > DeletePetition(int id)
 
     return NoContent();
 }
+
+
+
+
+//User Blocked
+
+$(function () {
+    $('form[action="/Admin/BlockUser"]').on('submit', function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var userId = form.find('input[name="userId"]').val();
+
+        $.post(form.attr('action'), { userId: userId })
+            .done(function (response) {
+                if (response.success) {
+                    toastr.success('User has been blocked successfully.');
+                } else {
+                    toastr.error('An error occurred while blocking the user.');
+                }
+            })
+            .fail(function () {
+                toastr.error('An error occurred while blocking the user.');
+            });
+    });
+});

@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using DFW_CW_40452913.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DFW_CW_40452913.Controllers
 {
@@ -13,16 +15,22 @@ namespace DFW_CW_40452913.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _context; 
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> userManager;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _context = context;
+            this.userManager = userManager;
         }
 
 
-        
+
+
+
+
+
         public IActionResult Index()
         {
             return View();

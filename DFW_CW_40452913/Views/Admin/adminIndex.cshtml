@@ -1,24 +1,40 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-<h2>Admin Dashboard</h2>
+﻿@model List<getUsersModel>
 
-<h3>Members</h3>
-<ul>
-  @foreach (var member in Model.Members)
-  {
-     <li>@member.FullName</li>
-  }
-</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Roles</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@string.Join(", ", user.Roles)</td>
+                <td>
+                    <form asp-controller="Admin" asp-action="ChangeRole" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <select name="roleName">
+                            <option value="Admin">Admin</option>
+                            <option value="User">User</option>
+                        </select>
+                        <button type="submit" style="margin-right: 10px;">Change Role</button>
+                    </form>
+                    <form asp-controller="Admin" asp-action="BlockUser" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" style="margin-right: 10px;">Block User</button>
+                    </form>
+                    <form asp-controller="Admin" asp-action="UnblockUser" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" style="margin-right: 10px;">Unblock User</button>
+                    </form>
+                </td>
 
-<h3>Petitions</h3>
+            </tr>
+        }
+    </tbody>
+</table>
 
-<ul>
-  @foreach (var petition in Model.Petitions)
-  {
-     <li>@petition.Title - Created by: @petition.Creator.FullName</li>
-  }
-</ul>
-
-}

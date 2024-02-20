@@ -16,4 +16,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\toggle-off-solid.svg" />
+    <None Include="wwwroot\images\toggle-on-solid.svg" />
+  </ItemGroup>
+
 </Project>
