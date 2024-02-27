@@ -1,6 +1,6 @@
+
 /* General Styles */
 body {
-    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,12 +9,12 @@ body {
 }
 
 .bw-mode {
-    background-color: #333333;
+    background-color: #29272d;
     color: aliceblue;
 }
 
 body:not(.bw-mode) {
-    background-color: #f8f9fa;
+    background-color: #fcfdfe;
     color: #333333;
 }
 
@@ -26,10 +26,10 @@ body:not(.bw-mode) {
     margin-left: 45%;
 }
 
-.Navbar-titulo{
-    position:absolute;
-    margin-left:32px;
-    color:black;
+.Navbar-titulo {
+    position: absolute;
+    margin-left: 32px;
+    color: black;
 }
 
 .nav-link {
@@ -63,8 +63,9 @@ body:not(.bw-mode) {
         word-wrap: break-word;
         text-decoration: none;
         overflow: auto;
-        margin-top:23%;
+        margin-top: 23%;
     }
+
     .navbar-collapse {
         max-height: 100vh;
         overflow-y: auto;
@@ -158,14 +159,14 @@ allmain {
 
     .petition-item .Image {
         position: revert-layer;
-        margin-top:23px;
+        margin-top: 23px;
         margin-bottom: 23px;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
     }
 
     .petition-item .PetitionTitle {
-        position:relative;
+        position: relative;
         font-size: 23px;
         padding: 10px;
         margin-bottom: 23px;
@@ -180,13 +181,12 @@ allmain {
         text-align: center; /* Center the text within the description */
         margin-left: 25%;
         margin-right: 25%;
-        }
+    }
 
     .petition-item:hover .Description {
         text-align: center; /* Center the text within the description */
         opacity: 1; /* Reveal the description when the petition item is hovered */
         max-height: 100%; /* Expand the description height */
-     
     }
 
     .petition-item .VoteYes {
@@ -195,18 +195,18 @@ allmain {
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin-top:23px;
-        margin-bottom:23px;
+        margin-top: 23px;
+        margin-bottom: 23px;
     }
 
-    /*When voted*/
-    .petition-item .VoteYes .Yes {
-        width: 35px;
-        height: 38.5px;
-        background: rgba(0, 154, 15, 0.47);
-        border: 1px solid rgba(0, 87, 19, 0.64);
-        border-radius: 4px;
-    }
+        /*When voted*/
+        .petition-item .VoteYes .Yes {
+            width: 35px;
+            height: 38.5px;
+            background: rgba(0, 154, 15, 0.47);
+            border: 1px solid rgba(0, 87, 19, 0.64);
+            border-radius: 4px;
+        }
 
 
 
@@ -220,22 +220,22 @@ allmain {
 
     /*Admin Delete Petition Btn */
 
-.petition-item .DeleteButton {
-    top: 23px;
-    right: 190px;
-    padding: 5px 10px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 23px;
-    margin-bottom: 23px;
-}
-
-    .petition-item .DeleteButton:hover {
-        background-color: #c82333;
+    .petition-item .DeleteButton {
+        top: 23px;
+        right: 190px;
+        padding: 5px 10px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 23px;
+        margin-bottom: 23px;
     }
+
+        .petition-item .DeleteButton:hover {
+            background-color: #c82333;
+        }
 
 
 
@@ -246,7 +246,7 @@ allmain {
     position: relative;
     width: 100%;
     text-align: center;
-    margin-top:17%;
+    margin-top: 17%;
 }
 
 
@@ -276,4 +276,32 @@ allmain {
     .petition-item {
         width: auto;
     }
+}
+
+
+/*Admin Panel*/
+
+
+
+.bw-mode th,
+.bw-mode td {
+    padding: 8px;
+    text-align: center; /* Align text to center */
+    gap: 10px;
+    background-color: dimgrey;
+    color: aliceblue;
+}
+
+.bw-mode th {
+    text-align: center; /* Align text to center */
+}
+
+.bw-mode tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table.table {
+    height: auto;
+    width: auto; 
+    margin: 0 auto; /* Center the table horizontally */
 }
