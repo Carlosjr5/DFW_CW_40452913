@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
     <None Include="wwwroot\images\toggle-off-solid.svg" />
     <None Include="wwwroot\images\toggle-on-solid.svg" />
   </ItemGroup>

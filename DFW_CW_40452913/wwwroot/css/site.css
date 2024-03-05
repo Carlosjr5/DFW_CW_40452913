@@ -17,29 +17,18 @@ body:not(.bw-mode) {
     background-color: #fcfdfe;
     color: #333333;
 }
-
 /* NAV BAR */
-.Navbar {
-    position: absolute;
-    height: 40px;
-    display: flex; /*Makes it horizonatlly the links menu*/
-    margin-left: 45%;
-}
-
 .Navbar-titulo {
-    position: absolute;
-    margin-left: 32px;
+    margin-left:23px;
     color: black;
 }
 
 .nav-link {
+    margin-right:auto;
     color: #8F8282;
-    display: flex;
     font-size: 15px;
     font-family: Inter;
-    word-wrap: break-word;
     text-decoration: none;
-    overflow: auto;
 }
 
     .nav-link:hover {
@@ -52,34 +41,20 @@ body:not(.bw-mode) {
         border-bottom: 7px solid #D9D9D9;
     }
 
-
-@media screen and (max-width: 992px) {
-
-    .nav-link {
-        color: #8F8282;
-        display: flex;
-        font-size: 15px;
-        font-family: Inter;
-        word-wrap: break-word;
-        text-decoration: none;
-        overflow: auto;
-        margin-top: 23%;
-    }
-
+@media screen and (max-width: 920px) {
     .navbar-collapse {
-        max-height: 100vh;
-        overflow-y: auto;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-top: none;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .navbar-nav {
         flex-direction: column;
-        overflow-x: hidden;
+        text-align: center;
     }
-
-        .navbar-nav .nav-item {
-            display: block;
-        }
 }
+
 
 /* Create Petition */
 .container {
@@ -119,6 +94,8 @@ body:not(.bw-mode) {
     margin: auto;
 }
 
+
+
 /* All Petitions */
 allbody {
     font-family: Arial, sans-serif;
@@ -157,13 +134,21 @@ allmain {
         min-height: 400px; /* Expanded height when hovered */
     }
 
+    /*Fixed Image issue*/
     .petition-item .Image {
-        position: revert-layer;
         margin-top: 23px;
         margin-bottom: 23px;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
     }
+    .petition-item .Image img {
+         width: auto; /* Set width to auto to adjust based on original dimensions */
+         max-width: 100%; /* Set maximum width to prevent images from exceeding their container */
+         height: auto; /* Ensure the aspect ratio of the images is maintained */
+         border-top-left-radius: 8px; /* Apply border-radius to the image */
+         border-bottom-left-radius: 8px;
+    }
+
 
     .petition-item .PetitionTitle {
         position: relative;
@@ -259,7 +244,6 @@ allmain {
 
 .contactfooter {
     position: relative;
-    position: relative;
     margin-top: 32%;
 }
 
@@ -300,8 +284,67 @@ allmain {
     background-color: #f2f2f2;
 }
 
-table.table {
-    height: auto;
-    width: auto; 
-    margin: 0 auto; /* Center the table horizontally */
+
+/* Table Styles */
+.table-wrapper {
+    overflow-x: auto;
 }
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+}
+
+    .table th, .table td {
+        padding: 10px;
+        white-space: nowrap; /* Prevent line breaks in table cells */
+        text-overflow: ellipsis; /* Add ellipsis for long content */
+        overflow: hidden;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+        color: #333;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+/* Button Styles */
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+.btn-info {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+    .btn-info:hover {
+        background-color: #138496;
+    }
