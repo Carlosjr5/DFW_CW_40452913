@@ -293,6 +293,15 @@ allmain {
 .table-wrapper {
     overflow-x: auto; /* Enable horizontal scrolling */
     max-width: 100%; /* Ensure the table wrapper doesn't exceed the viewport width */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin-top: 23px;
+}
+
+.table-container {
+    max-height: 400px; /* Set a maximum height for the table */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .table {
@@ -320,6 +329,11 @@ allmain {
         background-color: #f9f9f9;
     }
 
+
+    /* Color of Link text */
+    .table-wrapper table td a {
+        color: black;
+    }
 
 /* Button Styles */
 .btn {
