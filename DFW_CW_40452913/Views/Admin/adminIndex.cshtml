@@ -4,7 +4,7 @@
     <table class="table @ViewData["BWMode"]">
         <thead>
             <tr>
-                <th>Username</th>
+                <th>Email</th>
                 <th>Roles</th>
                 <th>Action</th>
             </tr>
@@ -13,7 +13,7 @@
             @foreach (var user in Model)
             {
                 <tr>
-                    <td>@user.UserName</td>
+                    <td>@user.UserEmail</td>
                     <td>@string.Join(", ", user.Roles)</td>
                     <td style="display: flex; gap: 10px; text-align:center;">
                         <form asp-controller="Admin" asp-action="ChangeRole" method="post">
@@ -36,5 +36,11 @@
                 </tr>
             }
         </tbody>
+
     </table>
 </div>
+
+<footer style="margin-top:35%; margin-left:45%">
+    &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+</footer>
+

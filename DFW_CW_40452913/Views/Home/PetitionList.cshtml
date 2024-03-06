@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <style>
+        .a{
+            color:black;
+        }
+        .table-container {
+            max-height: 400px; /* Set a maximum height for the table */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <allmain aria-labelledby="title">
+        <div class="table-wrapper">
+            <table class="table @ViewData["BWMode"]">
+                <thead class="bw-mode">
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Votes</th>
+                    </tr>
+                </thead>
+                <tbody id="petitionsList"></tbody>
+            </table>
+        </div>
+    </allmain>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to set a cookie
+            function setCookie(name, value, days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+
+            // Function to get a cookie
+            function getCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            var samplePetitions = [
+                {
+                    "Title": "Urgent Call to Action: Protect Our Planet, Save Our Environment!",
+                    "Author": "CJR"
+                },
+                {
+                    "Title": "Equal Education for All",
+                    "Author": "CJR"
+                },
+                {
+                    "Title": "Demand Peace: Stop War and Conflict Worldwide",
+                    "Author": "CJR"
+                }
+            ];
+
+            var petitionsList = document.getElementById('petitionsList');
+            var hasVoted = getCookie('voted');
+
+            samplePetitions.forEach(petition => {
+                var petitionRow = document.createElement('tr');
+
+                var petitionId = petition.Title.replace(/\s+/g, '-').toLowerCase();
+
+                petitionRow.innerHTML = `
+                                    <td><a href="/Home#${petitionId}">${petition.Title}</a></td>
+                                    <td>${petition.Author}</td>
+                                    <td>${hasVoted ? '1' : '0'}</td>
+                                `;
+
+                petitionsList.appendChild(petitionRow);
+
+             
+            });
+        });
+    </script>
+
+    <footer class="apfooter">
+        &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </footer>
+
+</body>
+
+</html>

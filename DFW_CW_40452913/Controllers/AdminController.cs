@@ -30,7 +30,7 @@ namespace DFW_CW_40452913.Controllers
             var userViewModels = users.Select(u => new getUsersModel
             {
                 Id = u.Id,
-                UserName = u.UserName,
+                UserEmail = u.UserName,
                 Roles = _userManager.GetRolesAsync(u).Result.ToList()
             }).ToList();
             return View(userViewModels);
