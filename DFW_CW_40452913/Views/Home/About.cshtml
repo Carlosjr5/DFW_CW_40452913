@@ -23,15 +23,17 @@
 
 <body>
     <allmain aria-labelledby="title">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search petitions...">
+            <button onclick="searchPetitions()">Search</button>
+        </div>
 
         <div class="allpetition-details">
             <div id="petitionsList"></div>
-
         </div>
     </allmain>
 
     <script>
-
         //Check for admin.
         var isAdmin = @isAdmin.ToString().ToLower();
 
@@ -86,19 +88,19 @@
 
             var petitionsList = document.getElementById('petitionsList');
 
+            // Function to render petitions
+            function renderPetitions(petitions) {
+                petitionsList.innerHTML = ''; // Clear previous content
 
-            // Check if the user has already voted
-            var hasVoted = getCookie('voted');
+                petitions.forEach(petition => {
+                    var petitionItem = document.createElement('div');
+                    var petitionId = petition.Title.replace(/\s+/g, '-').toLowerCase(); // Generate ID from petition title
+                    petitionItem.id = petitionId; // Set ID for the petition item
+                    petitionItem.classList.add('petition-item');
 
-            samplePetitions.forEach(petition => {
-                var petitionItem = document.createElement('div');
-                var petitionId = petition.Title.replace(/\s+/g, '-').toLowerCase(); // Generate ID from petition title
-                petitionItem.id = petitionId; // Set ID for the petition item
-                petitionItem.classList.add('petition-item');
+                    var formattedDate = new Date(petition.DateCreated).toLocaleString();
 
-                var formattedDate = new Date(petition.DateCreated).toLocaleString();
-
-                petitionItem.innerHTML = `
+                    petitionItem.innerHTML = `
                                 <div class="Image">
                                     <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
                                 </div>
@@ -114,31 +116,51 @@
                                 </div>
                             `;
 
-                petitionsList.appendChild(petitionItem);
+                    petitionsList.appendChild(petitionItem);
 
-                // Add event listener to vote button if the user has not already voted
-                if (!hasVoted) {
-                    var yesButton = petitionItem.querySelector('.YesButton');
-                    yesButton.addEventListener('click', function () {
-                        var counter = this.nextElementSibling;
-                        var count = parseInt(counter.textContent) + 1;
-                        counter.textContent = count;
-                        setCookie('voted', 'true', 365); // Set cookie to indicate that the user has voted
-                        this.textContent = 'Voted'; // Change button text to indicate that the user has voted
-                        this.disabled = true; // Disable the button after voting
-                    });
-                }
+                    // Add event listener to vote button if the user has not already voted
+                    if (!hasVoted) {
+                        var yesButton = petitionItem.querySelector('.YesButton');
+                        yesButton.addEventListener('click', function () {
+                            var counter = this.nextElementSibling;
+                            var count = parseInt(counter.textContent) + 1;
+                            counter.textContent = count;
+                            setCookie('voted', 'true', 365); // Set cookie to indicate that the user has voted
+                            this.textContent = 'Voted'; // Change button text to indicate that the user has voted
+                            this.disabled = true; // Disable the button after voting
+                        });
+                    }
 
-                // Add event listener to delete button if the user is an admin
-                if (isAdmin) {
-                    var deleteButton = petitionItem.querySelector('.DeleteButton');
-                    deleteButton.addEventListener('click', function () {
-                        petitionItem.remove();
-                    });
+                    // Add event listener to delete button if the user is an admin
+                    if (isAdmin) {
+                        var deleteButton = petitionItem.querySelector('.DeleteButton');
+                        deleteButton.addEventListener('click', function () {
+                            petitionItem.remove();
+                        });
+                    }
+                });
+            }
+
+            // Function to search petitions
+            function searchPetitions() {
+                var searchInput = document.getElementById('searchInput').value.toLowerCase();
+                var filteredPetitions = samplePetitions.filter(petition =>
+                    petition.Title.toLowerCase().includes(searchInput) || petition.Description.toLowerCase().includes(searchInput)
+                );
+                renderPetitions(filteredPetitions);
+            }
+
+            // Initial render
+            var hasVoted = getCookie('voted');
+            renderPetitions(samplePetitions);
+
+            // Listen for Enter key press event in search input
+            document.getElementById('searchInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    searchPetitions();
                 }
             });
         });
-
     </script>
 
     <footer class="apfooter">
