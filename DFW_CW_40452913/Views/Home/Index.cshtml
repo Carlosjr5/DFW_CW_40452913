@@ -3,46 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iPetition - Create a New Petition</title>
+    <title>Home</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Welcome to iPétition</h1>
+        <p>iPétition is a platform where you can create, sign, and share petitions on various causes and issues that matter to you.</p>
+    </header>
 
-    <div class="container text-center">
-        <h2 style="margin-bottom:5%">Create a New Petition</h2>
+    <main>
+        <section id="how-it-works">
+            <h2>About iPétition</h2>
+            <p>iPétition aims to empower individuals and communities to raise awareness and advocate for change on local, national, and global levels.</p>
+            <p>Whether it's environmental conservation, social justice, human rights, or any other pressing issue, iPétition provides a platform for voices to be heard and collective action to be taken.</p>
+       
+            <h2>How It Works</h2>
+            <p>
+                <a class="nav-link CreatePetition" asp-area="" asp-controller="Home" asp-action="CreatePetition"> 1. Create a Petition</a>
+                Start by crafting a compelling petition on the issue you care about. Provide a clear description, relevant images, and goals.
+            </p>
+            <p>
+                <a class="nav-link About" asp-area="" asp-controller="Home" asp-action="About"> 2. Gather Signatures</a>
+                 Share your petition with your networks via social media, email, and other channels to gather support and signatures from like-minded individuals.</p>
+            <p>
+                <a class="nav-link PetitionList" asp-area="" asp-controller="Home" asp-action="PetitionList"> 3. Make an Impact</a>
+                As signatures accumulate, your petition gains momentum and visibility. With enough support, you can drive change and make a meaningful impact on the issue at hand.
+            </p>
+        </section>
 
-     
-                <form id="createPetitionForm" action="/create" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="Title">Title</label>
-                        <input type="text" name="Title" class="form-control" required>
-                    </div>
+    
+    </main>
 
-                    <div class="form-group">
-                        <label for="Description">Description</label>
-                        <textarea name="Description" class="form-control" required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="Image">Upload Image</label>
-                        <input type="file" name="Image" class="form-control">
-                        <small class="text-muted">Upload the petition image from your computer.</small>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Create Petition</button>
-                </form>
-           
-  
-    </div>
 </body>
+<footer>
+    &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+</footer>
 
-
-    <footer class="cfooter">
-
-        &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </footer>
-
-
-
-<script src="~/js/site.js"></script>
 </html>

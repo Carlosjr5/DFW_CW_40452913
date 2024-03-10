@@ -24,32 +24,37 @@ namespace DFW_CW_40452913.Controllers
             _userManager = userManager;
         }
 
-        [AllowAnonymous] // Allow access to everyone
+        [AllowAnonymous] 
         public IActionResult Index()
         {
             return View();
         }
+        [AllowAnonymous] 
+        public IActionResult CreatePetition()
+        {
+            return View();
+        }
 
-        [AllowAnonymous] // Allow access to everyone
+        [AllowAnonymous] 
         public ActionResult About()
         {
             ViewBag.Message = "This is a petition page with an aim to achieve a consensus between humanity.";
             return View();
         }
 
-        [AllowAnonymous] // Allow access to everyone
+        [AllowAnonymous] 
         public ActionResult Contact()
         {
             return View();
         }
 
-        [AllowAnonymous] // Allow access to everyone
+        [AllowAnonymous] 
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [AllowAnonymous] // Allow access to everyone
+        [AllowAnonymous] 
         public IActionResult PetitionList()
         {
             return View();
@@ -62,7 +67,7 @@ namespace DFW_CW_40452913.Controllers
             var petition = GetPetitionById(id);
             if (petition == null)
             {
-                return NotFound(); // Handle case where petition with given id is not found
+                return NotFound();
             }
             return View(petition);
         }

@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DFW_CW_40452913</title>
+    <title>@ViewData["Title"] - iPétition</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DFW_CW_40452913.styles.css" asp-append-version="true" />
@@ -34,7 +34,10 @@
                                 <a class="nav-link Home" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link AllPetitions" asp-area="" asp-controller="Home" asp-action="About">Petitions</a>
+                                <a class="nav-link CreatePetition" asp-area="" asp-controller="Home" asp-action="CreatePetition">Create Petition</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link AllPetitions" asp-area="" asp-controller="Home" asp-action="About">All Petitions</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Home" asp-action="PetitionList">Petition List</a>
@@ -49,7 +52,10 @@
                                 <a class="nav-link Home" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link AllPetitions" asp-area="" asp-controller="Home" asp-action="About">Petitions</a>
+                                <a class="nav-link CreatePetition" asp-area="" asp-controller="Home" asp-action="CreatePetition">Create Petition</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link AllPetitions" asp-area="" asp-controller="Home" asp-action="About">All Petitions</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Home" asp-action="PetitionList">Petition List</a>
@@ -114,4 +120,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

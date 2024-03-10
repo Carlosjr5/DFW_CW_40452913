@@ -1,5 +1,3 @@
-
-/* General Styles */
 body {
     margin: 0;
     padding: 0;
@@ -9,7 +7,7 @@ body {
 }
 
 .bw-mode {
-    background-color: #29272d;
+    background-color: black;
     color: aliceblue;
 }
 
@@ -17,18 +15,40 @@ body:not(.bw-mode) {
     background-color: #fcfdfe;
     color: #333333;
 }
+
+/* Header Styles */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 40px;
+    text-align: center;
+}
+
+/* Section Styles */
+section {
+    padding: 40px;
+    text-align: center;
+}
+
+    section h2 {
+        margin-bottom: 20px;
+    }
+
+
+
+
 /* NAV BAR */
 .Navbar-titulo {
-    margin-left:23px;
+    margin-left: 23px;
     color: black;
 }
 
 .nav-link {
-    margin-right:auto;
     color: #8F8282;
     font-size: 15px;
     font-family: Inter;
     text-decoration: none;
+    margin-right:auto;
 }
 
     .nav-link:hover {
@@ -52,6 +72,7 @@ body:not(.bw-mode) {
     .navbar-nav {
         flex-direction: column;
         text-align: center;
+        justify-content: center; /* Center the items vertically */
     }
 }
 
@@ -159,18 +180,32 @@ allmain {
         font-size: 23px;
         padding: 10px;
         margin-bottom: 23px;
+        color: black;
     }
 
-    .petition-item .Description {
-        flex: 1; /* Allow the description to take up the remaining space */
-        opacity: 0; /* Initially hide the description */
-        transition: opacity 0.3s ease;
-        max-height: 0; /* Initially hide the description */
-        transition: max-height 0.3s ease; /* Add transition for smooth animation */
-        text-align: center; /* Center the text within the description */
-        margin-left: 25%;
-        margin-right: 25%;
+.PetitionTitle a {
+    color: inherit; /* Inherit the color from the parent */
+}
+
+.bw-mode .PetitionTitle a {
+    color: white; 
+}
+
+    .bw-mode .PetitionTitle a:hover {
+        color: black;
     }
+
+
+.petition-item .Description {
+    flex: 1; /* Allow the description to take up the remaining space */
+    opacity: 0; /* Initially hide the description */
+    transition: opacity 0.3s ease;
+    max-height: 0; /* Initially hide the description */
+    transition: max-height 0.3s ease; /* Add transition for smooth animation */
+    text-align: center; /* Center the text within the description */
+    margin-left: 25%;
+    margin-right: 25%;
+}
 
     .petition-item:hover .Description {
         text-align: center; /* Center the text within the description */
@@ -178,9 +213,10 @@ allmain {
         max-height: 100%; /* Expand the description height */
     }
 
+    /*Number of votes*/
     .petition-item .VoteYes {
         position: relative;
-        color: white;
+        color: black;
         border: none;
         border-radius: 5px;
         cursor: pointer;
@@ -188,14 +224,18 @@ allmain {
         margin-bottom: 23px;
     }
 
-        /*When voted*/
-        .petition-item .VoteYes .Yes {
-            width: 35px;
-            height: 38.5px;
-            background: rgba(0, 154, 15, 0.47);
-            border: 1px solid rgba(0, 87, 19, 0.64);
-            border-radius: 4px;
-        }
+.bw-mode .petition-item .VoteYes{
+    color: white;
+}
+
+/*When voted*/
+.petition-item .VoteYes .Yes {
+    width: 35px;
+    height: 38.5px;
+    background: green;
+    border: 1px solid rgba(0, 87, 19, 0.64);
+    border-radius: 4px;
+}
 
 
 
@@ -207,12 +247,22 @@ allmain {
         cursor: pointer;
     }
 
+.petition-item .CommentButton {
+    background-color: dodgerblue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 23px;
+    margin-bottom: 23px;
+}
+
+
     /*Admin Delete Petition Btn */
 
     .petition-item .DeleteButton {
         top: 23px;
         right: 190px;
-        padding: 5px 10px;
         background-color: #dc3545;
         color: white;
         border: none;
@@ -222,37 +272,46 @@ allmain {
         margin-bottom: 23px;
     }
 
-        .petition-item .DeleteButton:hover {
-            background-color: #c82333;
-        }
+.petition-item .DeleteButton:hover {
+     background-color: #c82333;
+}
+
 
 
 
 /* Footer Styles */
 
-
-.cfooter {
-    position: relative;
-    width: 100%;
+.plfooter {
+    position: center;
     text-align: center;
-    margin-top: 17%;
+    margin-top: 38%;
+}
+.cfooter {
+    position: center;
+    text-align: center;
+    margin-top: 38%;
 }
 
 
-
 .apfooter {
-    position: relative;
-    margin-left: 42%;
+    position: center;
+    text-align: center;
     margin-top: 23%;
 }
 
 .contactfooter {
-    position: relative;
-    margin-top: 32%;
+    position: center;
+    text-align: center;
+    margin-top: 26%;
 }
 
 
-
+/*Admin User footer*/
+.adfooter {
+    position: center;
+    text-align: center;
+    margin-top: 38%;
+}
 
 
 /* Media Queries */
@@ -288,7 +347,6 @@ allmain {
     background-color: #f2f2f2;
 }
 
-
 /* Table Styles */
 .table-wrapper {
     overflow-x: auto; /* Enable horizontal scrolling */
@@ -308,6 +366,7 @@ allmain {
     width: max-content; /* Set table width to fit its content */
     border-collapse: collapse;
     border-radius: 8px;
+    table-layout: fixed; /* Fix table layout to prevent cell width from affecting column width */
 }
 
     .table th,
@@ -316,6 +375,7 @@ allmain {
         white-space: nowrap; /* Prevent line breaks in table cells */
         text-overflow: ellipsis; /* Add ellipsis for long content */
         overflow: hidden;
+        min-width: 150px; /* Set a minimum width for table cells to ensure content is fully visible */
     }
 
     .table th {
@@ -329,11 +389,12 @@ allmain {
         background-color: #f9f9f9;
     }
 
+/* Color of Link text */
+.table-wrapper table td a {
+    color: black;
+}
 
-    /* Color of Link text */
-    .table-wrapper table td a {
-        color: black;
-    }
+
 
 /* Button Styles */
 .btn {

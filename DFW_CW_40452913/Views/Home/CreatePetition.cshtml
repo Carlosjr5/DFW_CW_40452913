@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPetition - Create a New Petition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container text-center">
+        <h2 style="margin-bottom:5%">Create a petition</h2>
+
+
+        <form id="createPetitionForm" action="/create" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <small class="text-muted">Title</small>
+                <input type="text" name="Title" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+
+                <small class="text-muted">Description</small>
+                <textarea name="Description" class="form-control" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <input type="file" name="Image" class="form-control">
+                <small class="text-muted">Upload the petition image from your computer.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Petition</button>
+        </form>
+
+
+    </div>
+</body>
+
+
+<footer class="cfooter">
+
+    &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+</footer>
+
+
+
+<script src="~/js/site.js"></script>
+</html>
