@@ -29,6 +29,19 @@ namespace DFW_CW_40452913.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         [AllowAnonymous] 
         public IActionResult CreatePetition()
         {
@@ -78,7 +91,7 @@ namespace DFW_CW_40452913.Controllers
         }
 
 
-        [AllowAnonymous] // Allow access to everyone
+        [AllowAnonymous] 
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

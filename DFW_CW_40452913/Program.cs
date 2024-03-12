@@ -2,9 +2,10 @@ using DFW_CW_40452913.Controllers;
 using DFW_CW_40452913.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+    
 public class Program
 {
+  
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -44,12 +45,12 @@ public class Program
             endpoints.MapControllers();
             endpoints.MapControllerRoute(
                 name: "admin",
-                pattern: "{controller=Admin}/{action=About}/{id?}");
+                pattern: "{controller=Admin}/{action=Index}/{id?}");
         });
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=About}/{id?}");
+            pattern: "{controller=Home}/{action=Index}/{id?}");
         app.MapRazorPages();
 
         using (var scope = app.Services.CreateScope())
@@ -98,22 +99,9 @@ public class Program
             }
         }
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+       
 
-            var users = await dbContext.Users.ToListAsync();
 
-            foreach (var user in users)
-            {
-                var roles = await userManager.GetRolesAsync(user);
-
-                // Output user's email and role
-                Console.WriteLine($"User: {user.Email}, Role: {string.Join(", ", roles)}");
-
-            }
-        }
 
         app.Run();
     }

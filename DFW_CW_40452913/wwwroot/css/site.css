@@ -4,6 +4,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-color: white;
 }
 
 .bw-mode {
@@ -12,7 +13,7 @@ body {
 }
 
 body:not(.bw-mode) {
-    background-color: #fcfdfe;
+    background-color: white;
     color: #333333;
 }
 
@@ -163,15 +164,11 @@ allmain {
     .petition-item .Image {
         margin-top: 23px;
         margin-bottom: 23px;
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
     }
     .petition-item .Image img {
          width: auto; /* Set width to auto to adjust based on original dimensions */
          max-width: 100%; /* Set maximum width to prevent images from exceeding their container */
          height: auto; /* Ensure the aspect ratio of the images is maintained */
-         border-top-left-radius: 8px; /* Apply border-radius to the image */
-         border-bottom-left-radius: 8px;
     }
 
 
@@ -201,10 +198,9 @@ allmain {
     opacity: 0; /* Initially hide the description */
     transition: opacity 0.3s ease;
     max-height: 0; /* Initially hide the description */
-    transition: max-height 0.3s ease; /* Add transition for smooth animation */
-    text-align: center; /* Center the text within the description */
-    margin-left: 25%;
-    margin-right: 25%;
+    text-align: center; 
+    margin-left: 5%;
+    margin-right: 5%;
 }
 
     .petition-item:hover .Description {
@@ -284,7 +280,7 @@ allmain {
 .plfooter {
     position: center;
     text-align: center;
-    margin-top: 38%;
+    margin-top: 35%;
 }
 .cfooter {
     position: center;

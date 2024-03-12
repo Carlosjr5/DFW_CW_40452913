@@ -16,27 +16,26 @@
                     <td>@user.UserEmail</td>
                     <td>@string.Join(", ", user.Roles)</td>
                     <td style="display: flex; gap: 10px; text-align:center;">
-                        <form asp-controller="Admin" asp-action="ChangeRole" method="post">
+                        <form asp-controller="Admin" asp-action="ChangeRole" method="post" id="changeRoleForm_@user.Id">
                             <input type="hidden" name="userId" value="@user.Id" />
-                            <select name="roleName">
+                            <select name="roleName" id="roleSelector_@user.Id">
                                 <option value="Admin">Admin</option>
                                 <option value="User">User</option>
                             </select>
-                            <button type="submit" style="background-color:lightgreen;">Change Role</button>
+                            <button type="button" style="background-color: lightgreen;" onclick="toggleUserRole('@user.Id')">Change Role</button>
                         </form>
                         <form asp-controller="Admin" asp-action="BlockUser" method="post">
                             <input type="hidden" name="userId" value="@user.Id" />
-                            <button type="submit" style="background-color:indianred;">Block User</button>
+                            <button type="submit" style="background-color: indianred;">Block User</button>
                         </form>
                         <form asp-controller="Admin" asp-action="UnblockUser" method="post">
                             <input type="hidden" name="userId" value="@user.Id" />
-                            <button type="submit" style="background-color:skyblue;">Unblock User</button>
+                            <button type="submit" style="background-color: skyblue;">Unblock User</button>
                         </form>
                     </td>
                 </tr>
             }
         </tbody>
-
     </table>
 </div>
 
@@ -44,3 +43,15 @@
     &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 </footer>
 
+<script>
+    function toggleUserRole(userId) {
+        var roleSelector = document.getElementById("roleSelector_" + userId);
+        var currentRole = roleSelector.value;
+        if (currentRole === "Admin") {
+            roleSelector.value = "User";
+        } else {
+            roleSelector.value = "Admin";
+        }
+        document.getElementById("changeRoleForm_" + userId).submit();
+    }
+</script>
