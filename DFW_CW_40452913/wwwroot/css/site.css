@@ -166,8 +166,8 @@ allmain {
         margin-bottom: 23px;
     }
     .petition-item .Image img {
-         width: auto; /* Set width to auto to adjust based on original dimensions */
-         max-width: 100%; /* Set maximum width to prevent images from exceeding their container */
+         width: auto; /* Sets width to auto to adjust based on original dimensions */
+         max-width: 100%; /* Sets maximum width to prevent images from exceeding their container */
          height: auto; /* Ensure the aspect ratio of the images is maintained */
     }
 
@@ -347,22 +347,13 @@ allmain {
 .table-wrapper {
     overflow-x: auto; /* Enable horizontal scrolling */
     max-width: 100%; /* Ensure the table wrapper doesn't exceed the viewport width */
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    margin-top: 23px;
-}
-
-.table-container {
-    max-height: 400px; /* Set a maximum height for the table */
-    overflow-y: auto; /* Enable vertical scrolling */
+    justify-content:center;
 }
 
 .table {
     width: max-content; /* Set table width to fit its content */
     border-collapse: collapse;
     border-radius: 8px;
-    table-layout: fixed; /* Fix table layout to prevent cell width from affecting column width */
 }
 
     .table th,
@@ -371,7 +362,6 @@ allmain {
         white-space: nowrap; /* Prevent line breaks in table cells */
         text-overflow: ellipsis; /* Add ellipsis for long content */
         overflow: hidden;
-        min-width: 150px; /* Set a minimum width for table cells to ensure content is fully visible */
     }
 
     .table th {
@@ -442,3 +432,9 @@ allmain {
     .ViewPetitionButton:hover {
         background-color: #0056b3;
     }
+
+
+/*Filter Petition List Panel*/
+.filter-wrapper{
+    margin-bottom:5%;
+}

@@ -1,13 +1,14 @@
 ﻿@model List<getUsersModel>
 
-<div class="table-wrapper">
+<div class="d-flex justify-content-center">
+<div class="table-wrapper" >
     <table class="table @ViewData["BWMode"]">
         <thead>
-            <tr>
-                <th>Email</th>
+            <trstyle>
+                <th>Username</th>
                 <th>Roles</th>
                 <th>Action</th>
-            </tr>
+            </trstyle>
         </thead>
         <tbody>
             @foreach (var user in Model)
@@ -16,21 +17,21 @@
                     <td>@user.UserEmail</td>
                     <td>@string.Join(", ", user.Roles)</td>
                     <td style="display: flex; gap: 10px; text-align:center;">
-                        <form asp-controller="Admin" asp-action="ChangeRole" method="post" id="changeRoleForm_@user.Id">
+                        <form asp-controller="Admin" asp-action="ChangeRole" method="post">
                             <input type="hidden" name="userId" value="@user.Id" />
-                            <select name="roleName" id="roleSelector_@user.Id">
+                            <select name="roleName">
                                 <option value="Admin">Admin</option>
                                 <option value="User">User</option>
                             </select>
-                            <button type="button" style="background-color: lightgreen;" onclick="toggleUserRole('@user.Id')">Change Role</button>
+                            <button type="submit" style="background-color:lightgreen;">Change Role</button>
                         </form>
                         <form asp-controller="Admin" asp-action="BlockUser" method="post">
                             <input type="hidden" name="userId" value="@user.Id" />
-                            <button type="submit" style="background-color: indianred;">Block User</button>
+                            <button type="submit" style="background-color:indianred;">Block User</button>
                         </form>
                         <form asp-controller="Admin" asp-action="UnblockUser" method="post">
                             <input type="hidden" name="userId" value="@user.Id" />
-                            <button type="submit" style="background-color: skyblue;">Unblock User</button>
+                            <button type="submit" style="background-color:skyblue;">Unblock User</button>
                         </form>
                     </td>
                 </tr>
@@ -38,6 +39,8 @@
         </tbody>
     </table>
 </div>
+</div>
+
 
 <footer class="adfooter">
     &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

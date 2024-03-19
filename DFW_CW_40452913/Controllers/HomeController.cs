@@ -24,23 +24,25 @@ namespace DFW_CW_40452913.Controllers
             _userManager = userManager;
         }
 
+        
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+       
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         [AllowAnonymous] 
         public IActionResult Index()
         {
             return View();
         }
 
-        [AllowAnonymous]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public IActionResult Login()
-        {
-            return View();
-        }
+   
 
         [AllowAnonymous] 
         public IActionResult CreatePetition()
