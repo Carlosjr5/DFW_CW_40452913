@@ -1,5 +1,7 @@
 ﻿@{
     var isAdmin = User.IsInRole("admin");
+    @model List<DFW_CW_40452913.Data.Petition>
+
 }
 
 <!DOCTYPE html>
@@ -29,7 +31,37 @@
         </div>
 
         <div class="allpetition-details">
-            <div id="petitionsList"></div>
+            <div id="petitionsList">
+                @foreach (var petition in Model)
+                {
+                    <div class="petition-item">
+                        <div class="Image">
+                            <img src="@petition.ImageUrl" alt="Petition Image" class="petition-image" />
+                        </div>
+                        <div class="PetitionTitle">
+                            <a href="/Home/About#@petition.Id">@petition.Title</a>
+                        </div>
+                        <div class="Description">@Html.Raw(petition.Description)</div>
+                        <div class="interactions">
+                            <!-- Like Button -->
+                            <button class="LikeButton" data-petition-id="@petition.Id">Like</button>
+
+                            <!-- Share Button -->
+                            <button class="ShareButton" onclick="sharePetition('@petition.Title')">Share</button>
+
+                            <!-- Comment Form -->
+                            <form class="CommentForm" data-petition-id="@petition.Id">
+                                <input type="text" placeholder="Leave a comment..." name="commentText" />
+                                <button type="submit">Comment</button>
+                            </form>
+                        </div>
+                        @if (isAdmin)
+                        {
+                            <button class="DeleteButton">Delete</button>
+                        }
+                    </div>
+                }
+            </div>
         </div>
     </allmain>
 
@@ -61,30 +93,6 @@
                 return null;
             }
 
-            var samplePetitions = [
-                {
-                    "Title": "Urgent Call to Action: Protect Our Planet, Save Our Environment!",
-                    "Description": "We, the undersigned, are deeply concerned about the deteriorating state of our environment and the imminent threats posed to our planet's health and sustainability.<br><br>Climate change, deforestation, pollution, and loss of biodiversity are just a few of the pressing issues that demand immediate attention and action.<br> The consequences of inaction are dire and far-reaching, affecting not only our natural world but also the well-being of current and future generations.<br><br>Rising temperatures, extreme weather events, habitat destruction, and species extinction are already occurring at alarming rates, with devastating impacts on ecosystems and communities worldwide.<br> It is imperative that we unite as a global community to address these challenges head-on.<br><br>We call upon governments, corporations, and individuals to prioritize environmental conservation and adopt sustainable practices in all aspects of life.<br><br>This includes reducing carbon emissions, protecting natural habitats, promoting renewable energy sources, implementing eco-friendly policies, and supporting initiatives that promote conservation and environmental stewardship.<br><br>By signing this petition, you are adding your voice to the growing chorus of people demanding decisive action to protect our planet and secure a sustainable future for all.<br><br>Together, we can make a difference and ensure that future generations inherit a healthy and thriving environment.<br><br>Let's act now before it's too late. Our planet's survival depends on it.",
-                    "ImageUrl": "https://imgs.search.brave.com/hf6uk11diK0bOyJ8ohzWIYQeSPh4AGX3jM6goZcVvfQ/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93d3cu/Y29uc2VydmUtZW5l/cmd5LWZ1dHVyZS5j/b20vd3AtY29udGVu/dC91cGxvYWRzLzIw/MTQvMDYvcG9sbHV0/aW9uLmpwZw",
-                    "DateCreated": "2024-02-10T10:30:00",
-                    "Author": "Weshul Clen"
-                },
-                {
-                    "Title": "Equal Education for All",
-                    "Description": "Education is the cornerstone of empowerment and opportunity, yet millions around the world are denied access to quality education simply because of their socio-economic status, gender, ethnicity, or geographic location.<br><br>This inequality perpetuates a cycle of poverty, perpetuates social injustices, and hinders the potential for global progress.<br><br>We believe that every individual, regardless of their background, deserves the right to a quality education.<br><br>Education not only equips individuals with the knowledge and skills needed to succeed but also fosters critical thinking, tolerance, and understanding—essential qualities for building a just and equitable society.<br><br>This petition calls upon governments, policymakers, and stakeholders at all levels to prioritize and invest in education systems that are inclusive, accessible, and equitable.<br><br>This includes ensuring equal access to schools, eliminating barriers to education such as discrimination and financial constraints, providing support for marginalized communities, and promoting educational opportunities for girls and women.<br><br>By signing this petition, you are standing in solidarity with millions of individuals around the world who are fighting for their right to education.<br><br>Together, we can break down the barriers that prevent so many from accessing quality education and create a world where every person has the opportunity to reach their full potential.<br><br>Let's work together to build a future where education is truly a universal right, not a privilege.",
-                    "ImageUrl": "https://imgs.search.brave.com/NiDY9qZE7F0boKkik7nPB_tcbpqSMNfygzYhMDpLC-k/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzA0LzIyLzk0LzYy/LzM2MF9GXzQyMjk0/NjIyNV9md0FMS3hQ/Smc1SHRRTWtjYjVE/VnV5Q1dQWVNNTkgz/cy5qcGc",
-                    "DateCreated": "2024-02-11T15:45:00",
-                    "Author": "Charles Murray"
-                },
-                {
-                    "Title": "Demand Peace: Stop War and Conflict Worldwide",
-                    "Description": "War and conflict inflict immeasurable suffering, devastation, and loss on communities and societies around the world.<br><br>The toll of armed conflicts is not just measured in casualties but also in shattered lives, displaced families, and destroyed infrastructure.<br><br>We cannot continue to allow violence to be the default solution to international disputes.<br><br>This petition is a call to action for world leaders, governments, and international organizations to prioritize diplomacy, dialogue, and peaceful resolutions to conflicts.<br><br>We urge all parties involved in conflicts to lay down their arms, engage in constructive negotiations, and work towards sustainable peace agreements.<br><br>It is time to recognize that there are no winners in war—only loss and destruction.<br><br>Instead of investing resources in weapons and military operations, we must redirect our efforts towards building bridges, fostering understanding, and promoting cooperation between nations.<br><br>By signing this petition, you are adding your voice to the growing movement for peace and sending a clear message to leaders worldwide: the time for war is over.<br><br>Let us come together as a global community to build a world where conflicts are resolved through dialogue, respect for human rights, and mutual understanding.<br><br>Together, we can create a future where peace prevails and all people can live free from the fear of violence and conflict.",
-                    "ImageUrl": "https://imgs.search.brave.com/2cI_UPuw6VTmxb42_mKuKfUT7doXvmz8TB-eaUcGlPM/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNTEy/ODEwNzg0L3Bob3Rv/L3dvcmxkLXdhci1p/aS1zb2xkaWVycy1s/b29raW5nLWZvci10/aGUtZW5lbXkuanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPTYx/ZXNZVE56a1R1eG5w/TEo3bmNVT3dUekxw/VjdJeVdRb2VZY1I4/Q3hIclE9",
-                    "DateCreated": "2024-02-12T15:45:00",
-                    "Author": "Jack Burns"
-                }
-            ];
-
 
             var petitionsList = document.getElementById('petitionsList');
 
@@ -101,22 +109,22 @@
                     var formattedDate = new Date(petition.DateCreated).toLocaleString();
 
                     petitionItem.innerHTML = `
-                                <div class="Image">
-                                    <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
-                                </div>
-                                         <small>Author: ${petition.Author}</small>
-                                <div class="PetitionTitle">
-                                    <a href="/Home/About#${petitionId}">${petition.Title}</a> <!-- Link to petition item using ID with tagging -->
-                                </div>
-                                <div class="Description">${petition.Description}</div>
-                                <div class="VoteYes">
-                                    <button class="YesButton">${hasVoted ? 'Voted' : 'Vote'}</button>
-                                    <div class="Counter">${hasVoted ? '1' : '0'}</div>
-                                </div>
-                                 <button class="ShareButton">Share</button>
-                                 <button class="CommentButton">Comment</button>
-                                 ${isAdmin ? `<button class="DeleteButton">Delete</button>` : ''}
-                            `;
+                                        <div class="Image">
+                                            <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
+                                        </div>
+                                                 <small>Author: ${petition.Author}</small>
+                                        <div class="PetitionTitle">
+                                            <a href="/Home/About#${petitionId}">${petition.Title}</a> <!-- Link to petition item using ID with tagging -->
+                                        </div>
+                                        <div class="Description">${petition.Description}</div>
+                                        <div class="VoteYes">
+                                            <button class="YesButton">${hasVoted ? 'Voted' : 'Vote'}</button>
+                                            <div class="Counter">${hasVoted ? '1' : '0'}</div>
+                                        </div>
+                                         <button class="ShareButton">Share</button>
+                                         <button class="CommentButton">Comment</button>
+                                         ${isAdmin ? `<button class="DeleteButton">Delete</button>` : ''}
+                                    `;
 
                     petitionsList.appendChild(petitionItem);
 
@@ -161,6 +169,41 @@
                 if (e.key === 'Enter') {
                     searchPetitions();
                 }
+            });
+        });
+
+
+        // Example function for the Share button
+        function sharePetition(title) {
+            alert(`Share this petition: ${title}`);
+            // Implement sharing logic here, could be linking to social media platforms, etc.
+        }
+
+        document.querySelectorAll('.LikeButton').forEach(button => {
+            button.addEventListener('click', function () {
+                // Find the parent petition item of this button
+                var petitionItem = this.closest('.petition-item');
+
+                // Get the petition title from within this petition item
+                var petitionTitle = petitionItem.querySelector('.PetitionTitle').textContent;
+
+                // Implement your AJAX call here to increment the like count in the database
+                alert(`Liked petition: ${petitionTitle}`);
+                // After successful AJAX call, update the likes count displayed
+            });
+        });
+
+
+        // Handle comment form submission
+        document.querySelectorAll('.CommentForm').forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const petitionId = this.getAttribute('data-petition-id');
+                const commentText = this.querySelector('[name="commentText"]').value;
+                // Implement your AJAX call here to post the comment to the server
+                alert(`Comment on petition ${petitionId}: ${commentText}`);
+                // Clear the comment input field after submission
+                this.querySelector('[name="commentText"]').value = '';
             });
         });
     </script>

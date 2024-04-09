@@ -15,9 +15,13 @@ public class Program
             options.UseSqlServer(connectionString));
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+        builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddDefaultUI()
+            .AddDefaultTokenProviders()
             .AddRoles<IdentityRole>() // Adding identity role for admin and user.
+
             .AddEntityFrameworkStores<ApplicationDbContext>();
+
 
         builder.Services.AddControllersWithViews();
        
@@ -40,6 +44,17 @@ public class Program
 
         app.UseAuthorization();
 
+
+
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
@@ -48,9 +63,6 @@ public class Program
                 pattern: "{controller=Admin}/{action=Index}/{id?}");
         });
 
-        app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
         app.MapRazorPages();
 
         using (var scope = app.Services.CreateScope())
@@ -68,6 +80,7 @@ public class Program
             }
         }
 
+        //Creating new temporary user.
         using (var scope = app.Services.CreateScope())
         {
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
@@ -99,11 +112,11 @@ public class Program
             }
         }
 
-       
 
-
+    
 
         app.Run();
+
     }
 
 

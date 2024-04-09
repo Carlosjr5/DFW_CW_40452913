@@ -36,6 +36,9 @@ section {
     }
 
 
+.external-login {
+    display: none;
+}
 
 
 /* NAV BAR */
@@ -147,7 +150,7 @@ allmain {
 /*All Petitions*/
 
 .petition-item {
-    min-height: 593px; /* Initial height */
+     /* Initial height */
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -156,9 +159,11 @@ allmain {
     transition: min-height 0.3s ease;
 }
 
-    .petition-item:hover {
-        min-height: 400px; /* Expanded height when hovered */
-    }
+
+
+.petition-item:hover {
+    min-height: 400px; /* Expanded height when hovered */
+}
 
     /*Fixed Image issue*/
     .petition-item .Image {
@@ -177,7 +182,6 @@ allmain {
         font-size: 23px;
         padding: 10px;
         margin-bottom: 23px;
-        color: black;
     }
 
 .PetitionTitle a {
@@ -189,7 +193,7 @@ allmain {
 }
 
     .bw-mode .PetitionTitle a:hover {
-        color: black;
+        color: white;
     }
 
 

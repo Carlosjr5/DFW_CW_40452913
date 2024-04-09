@@ -1,53 +1,20 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - iPétition</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/DFW_CW_40452913.styles.css" asp-append-version="true" />
-</head>
-    <body>
-    <div class="col-md-12">
-        <section>
-            <form id="account" method="post" action="/Identity/Account/Login" novalidate="novalidate">
-                <h2>Use a local account to log in.</h2>
-                <hr>
+﻿@model DFW_CW_40452913.Controllers.LoginViewModel
 
-                <div class="form-floating mb-3">
-                    <input class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" type="email" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Input_Email" name="Input.Email" value="">
-                    <label class="form-label" for="Input_Email">Email</label>
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Input.Email" data-valmsg-replace="true"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" type="password" data-val="true" data-val-required="The Password field is required." id="Input_Password" name="Input.Password">
-                    <label class="form-label" for="Input_Password">Password</label>
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
-                </div>
-                <div class="checkbox mb-3">
-                    <label class="form-label" for="Input_RememberMe">
-                        <input class="form-check-input" type="checkbox" data-val="true" data-val-required="The Remember me? field is required." id="Input_RememberMe" name="Input.RememberMe" value="true">
-                        Remember me?
-                    </label>
-                </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" href="/Identity/Account/ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a href="/Identity/Account/Register?returnUrl=%2F">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" href="/Identity/Account/ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8JXGJl071HNClKyj-bIknpplrAL6KODJ2QJaJ-JxOjG0TAUKQmVS2HbbGTV01M6CDORCFWouk-GzIUkcAGyAQ9-2WczTqwGufdNdN2d2kCPO1xzIEhuL9UqXddl4i1wnkmw8xJP9umsgK_Jsug_2H7Q"><input name="Input.RememberMe" type="hidden" value="false">
-            </form>
-        </section>
+<form asp-action="Login" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" placeholder="Email" autocomplete="username" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-</body>
-</html>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" placeholder="Password" autocomplete="current-password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group form-check">
+        <input asp-for="RememberMe" class="form-check-input" />
+        <label asp-for="RememberMe" class="form-check-label">Remember me?</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Log in</button>
+</form>

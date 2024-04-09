@@ -1,21 +1,41 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var isAdmin = User.IsInRole("admin");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Home - iPétition</title>
+    <link rel="stylesheet" href="~/Content/style.css">
     <style>
-        footer {
-            background-color: #333;
-            color: #fff;
+        .petitions-container {
+            margin-top: 2%;
+            display: flex;
+            overflow-x: auto; 
             padding: 20px 0;
-            text-align: center;
+            gap: 20px;
         }
 
-        footer a {
-            color: #fff;
-            text-decoration: none;
+        .petition-item {
+            margin-top: 2%;
+            margin-left: 6%;
+            width: 300px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+            .petition-item:hover {
+                transform: scale(1.1); /* Increase size on hover */
+            }
+
+        .petition-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -25,32 +45,26 @@
         <p>iPétition is a platform where you can create, sign, and share petitions on various causes and issues that matter to you.</p>
     </header>
 
-    <main>
-        <section id="how-it-works">
-            <h2>About iPétition</h2>
-            <p>iPétition aims to empower individuals and communities to raise awareness and advocate for change on local, national, and global levels.</p>
-            <p>Whether it's environmental conservation, social justice, human rights, or any other pressing issue, iPétition provides a platform for voices to be heard and collective action to be taken.</p>
-       
-            <h2>How It Works</h2>
-            <p>
-                <a class="nav-link CreatePetition" asp-area="" asp-controller="Home" asp-action="CreatePetition"> 1. Create a Petition</a>
-                Start by crafting a compelling petition on the issue you care about. Provide a clear description, relevant images, and goals.
-            </p>
-            <p>
-                <a class="nav-link About" asp-area="" asp-controller="Home" asp-action="About"> 2. Gather Signatures</a>
-                 Share your petition with your networks via social media, email, and other channels to gather support and signatures from like-minded individuals.</p>
-            <p>
-                <a class="nav-link PetitionList" asp-area="" asp-controller="Home" asp-action="PetitionList"> 3. Make an Impact</a>
-                As signatures accumulate, your petition gains momentum and visibility. With enough support, you can drive change and make a meaningful impact on the issue at hand.
-            </p>
-        </section>
+    <main aria-labelledby="title">
+      
 
-    
+        <div class="petitions-container">
+            @foreach (var petition in Model) // Iterate over the petitions passed to the view
+            {
+                <div class="petition-item" >
+                    <div class="Image">
+                        <img src="@petition.ImageUrl" alt="Petition Image" class="petition-image" />
+                    </div>
+                    <div class="PetitionTitle">
+                        <a href="/Home/About#@petition.Id">@petition.Title</a>
+                    </div>
+                </div>
+            }
+        </div>
     </main>
 
+    <footer>
+        &copy; 2024 - iPétition - <a href="@Url.Action("Privacy", "Home")">Privacy</a>
+    </footer>
 </body>
-<footer>
-    &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-</footer>
-
 </html>
