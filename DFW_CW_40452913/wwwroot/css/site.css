@@ -171,9 +171,11 @@ allmain {
         margin-bottom: 23px;
     }
     .petition-item .Image img {
-         width: auto; /* Sets width to auto to adjust based on original dimensions */
+
+         width: 450px; /* Sets width to auto to adjust based on original dimensions */
          max-width: 100%; /* Sets maximum width to prevent images from exceeding their container */
          height: auto; /* Ensure the aspect ratio of the images is maintained */
+         object-fit: cover; /* This property ensures the image covers the area without stretching. */
     }
 
 
@@ -222,6 +224,7 @@ allmain {
         cursor: pointer;
         margin-top: 23px;
         margin-bottom: 23px;
+     
     }
 
 .bw-mode .petition-item .VoteYes{
@@ -442,3 +445,54 @@ allmain {
 .filter-wrapper{
     margin-bottom:5%;
 }
+
+
+
+/* Comments Section */
+.commentsSection {
+    margin-right:13%;
+    margin-left:13%;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: none; /* hides it*/
+}
+
+.comment {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+    .comment p {
+        margin: 0 0 10px 0;
+        color: #333;
+        font-size: 16px;
+    }
+
+    .comment small {
+        font-size: 14px;
+        color: #666;
+    }
+
+
+.toggleCommentsButton {
+    background-color: lightblue; 
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10%;
+    margin-bottom: 10px; 
+    font-size: 16px;
+}
+
+.toggleCommentsButton:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+

@@ -1,7 +1,12 @@
-﻿@{
-    var isAdmin = User.IsInRole("admin");
-    @model List<DFW_CW_40452913.Data.Petition>
+﻿@model Tuple<List<DFW_CW_40452913.Data.Petition>, List<DFW_CW_40452913.Data.Comment>>
 
+@{
+    var isAdmin = User.IsInRole("admin");
+}
+
+@if (TempData["Message"] != null)
+{
+    <script>alert("@TempData["Message"]");</script>
 }
 
 <!DOCTYPE html>
@@ -32,42 +37,75 @@
 
         <div class="allpetition-details">
             <div id="petitionsList">
-                @foreach (var petition in Model)
+                @foreach (var petition in Model.Item1)
                 {
-                    <div class="petition-item">
-                        <div class="Image">
-                            <img src="@petition.ImageUrl" alt="Petition Image" class="petition-image" />
-                        </div>
+                    <div class="petition-item" id="@petition.Id">
+
+                        @if (!string.IsNullOrEmpty(petition.ImageUrl))
+                        {
+                            <div class="Image">
+                                <img src="@Url.Content(petition.ImageUrl)" alt="Petition Image" class="petition-image" />
+                            </div>
+                        }
                         <div class="PetitionTitle">
-                            <a href="/Home/About#@petition.Id">@petition.Title</a>
+                            <span>@petition.Title</span>
                         </div>
-                        <div class="Description">@Html.Raw(petition.Description)</div>
-                        <div class="interactions">
-                            <!-- Like Button -->
+                        <div class="Description">
+                            @Html.Raw(petition.Description.Replace("\n", "<br>"))
+                        </div>
+
+                        <br />
+                        <div>
                             <button class="LikeButton" data-petition-id="@petition.Id">Like</button>
 
-                            <!-- Share Button -->
                             <button class="ShareButton" onclick="sharePetition('@petition.Title')">Share</button>
+                        </div>
 
-                            <!-- Comment Form -->
-                            <form class="CommentForm" data-petition-id="@petition.Id">
-                                <input type="text" placeholder="Leave a comment..." name="commentText" />
-                                <button type="submit">Comment</button>
-                            </form>
+                        <br />
+                        <form action="AddComment" method="post">
+                            <input type="hidden" name="petitionId" value="@petition.Id" />
+                            <input type="text" placeholder="Leave a comment..." name="commentText" />
+                            <button type="submit">Comment</button>
+                        </form>
+
+                        @{
+                            var petitionComments = Model.Item2.Where(c => c.PetitionId == petition.Id).ToList();
+
+                        }
+                        <button class="toggleCommentsButton">Show Comments</button>
+
+                        <div class="commentsSection">
+                            @* Filter comments for the current petition. *@
+
+                            @if (petitionComments.Any())
+                            {
+                                foreach (var comment in petitionComments)
+                                {
+                                    <div class="comment">
+                                        <p>@comment.Text</p>
+                                        <small>Posted on @comment.DatePosted.ToString("dd MMM yyyy")</small>
+                                    </div>
+                                }
+                            }
+
                         </div>
                         @if (isAdmin)
                         {
-                            <button class="DeleteButton">Delete</button>
+                            <button class="DeleteButton" data-petition-id="@petition.Id">Delete</button>
                         }
                     </div>
                 }
             </div>
         </div>
+
     </allmain>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         //Check for admin.
         var isAdmin = @isAdmin.ToString().ToLower();
+
+
 
         document.addEventListener('DOMContentLoaded', function () {
             // Function to set a cookie
@@ -106,27 +144,57 @@
                     petitionItem.id = petitionId; // Set ID for the petition item
                     petitionItem.classList.add('petition-item');
 
-                    var formattedDate = new Date(petition.DateCreated).toLocaleString();
+                    //  var formattedDate = new Date(petition.DateCreated).toLocaleString();
 
-                    petitionItem.innerHTML = `
-                                        <div class="Image">
-                                            <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
-                                        </div>
-                                                 <small>Author: ${petition.Author}</small>
-                                        <div class="PetitionTitle">
-                                            <a href="/Home/About#${petitionId}">${petition.Title}</a> <!-- Link to petition item using ID with tagging -->
-                                        </div>
-                                        <div class="Description">${petition.Description}</div>
-                                        <div class="VoteYes">
-                                            <button class="YesButton">${hasVoted ? 'Voted' : 'Vote'}</button>
-                                            <div class="Counter">${hasVoted ? '1' : '0'}</div>
-                                        </div>
-                                         <button class="ShareButton">Share</button>
-                                         <button class="CommentButton">Comment</button>
-                                         ${isAdmin ? `<button class="DeleteButton">Delete</button>` : ''}
-                                    `;
+                    // Example of iterating over petitions and their comments
+                    petitions.forEach(petition => {
+                        var petitionItem = document.createElement('div');
+                        petitionItem.classList.add('petition-item');
 
-                    petitionsList.appendChild(petitionItem);
+                        // Construct comments HTML
+                        let commentsHtml = '';
+                        if (petition.Comments && petition.Comments.length > 0) {
+                            commentsHtml = '<div class="commentsSection" style="display:none;">';
+                            petition.Comments.forEach(comment => {
+                                commentsHtml += `
+                                            <div class="comment">
+                                                <p>${comment.Text}</p>
+                                                <small>Posted on ${new Date(comment.DatePosted).toLocaleDateString()}</small>
+                                            </div>
+                                        `;
+                            });
+                            commentsHtml += `
+                                    <form class="CommentForm" data-petition-id="${petition.Id}">
+                                            <input type="text" placeholder="Leave a comment..." name="commentText" />
+                                            <button type="submit">Comment</button>
+                                     </form>
+                                    </div>`;
+                        }
+
+                        // Include the commentsHtml in your petitionItem.innerHTML
+                        petitionItem.innerHTML = `
+                                    <div class="Image">
+                                        <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
+                                    </div>
+                                    <div class="PetitionTitle">
+                                        <span class="Title">${petition.Title}</span>
+                                    </div>
+                                    <div class="Description">${petition.Description.replace(/\n/g, "<br>")}</div>
+                                    <div class="interactions">
+                                        <button class="LikeButton" data-petition-id="${petition.Id}">Like</button>
+                                        <button class="ShareButton">Share</button>
+                                        <button class="toggleCommentsButton">Show Comments</button>
+                                    </div>
+                                    <div>
+                                    <button class="toggleCommentsButton">Show Comments</button>
+
+                                    ${commentsHtml}
+                                    </div>
+                                `;
+
+                        // Append petitionItem to the container
+                        document.getElementById('petitionsList').appendChild(petitionItem);
+                    });
 
                     // Add event listener to vote button if the user has not already voted
                     if (!hasVoted) {
@@ -170,42 +238,79 @@
                     searchPetitions();
                 }
             });
-        });
 
 
-        // Example function for the Share button
-        function sharePetition(title) {
-            alert(`Share this petition: ${title}`);
-            // Implement sharing logic here, could be linking to social media platforms, etc.
-        }
 
-        document.querySelectorAll('.LikeButton').forEach(button => {
-            button.addEventListener('click', function () {
-                // Find the parent petition item of this button
-                var petitionItem = this.closest('.petition-item');
+            // Example function for the Share button
+            function sharePetition(title) {
+                alert(`Share this petition: ${title}`);
+            }
 
-                // Get the petition title from within this petition item
-                var petitionTitle = petitionItem.querySelector('.PetitionTitle').textContent;
+            // Attaching event listener to the common parent element
+            document.getElementById('petitionsList').addEventListener('click', function (event) {
+                // Checking if the clicked element is a Like button
+                if (event.target.classList.contains('LikeButton')) {
+                    const button = event.target;
+                    const petitionId = button.getAttribute('data-petition-id');
 
-                // Implement your AJAX call here to increment the like count in the database
-                alert(`Liked petition: ${petitionTitle}`);
-                // After successful AJAX call, update the likes count displayed
+                    // Check if the user has already voted for this petition using cookies
+                    if (getCookie('voted_' + petitionId)) {
+                        button.disabled = true; // Optionally disable the button
+                        alert('You have already liked this petition.');
+                        return; // Exit if already voted
+                    }
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Home/IncrementVote', // Adjust the URL as necessary
+                        data: { petitionId: petitionId },
+                        success: function (data) {
+                            if (data.success) {
+                                button.textContent = 'Like (' + data.votes + ')';
+                                // Mark that the user has voted for this petition
+                                setCookie('voted_' + petitionId, 'true', 365);
+                                button.disabled = true; // Optionally disable the button after voting
+                            } else {
+                                alert('Error updating the vote: ' + data.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error updating the vote. Please try again later.');
+                        }
+                    });
+                }
             });
-        });
 
 
-        // Handle comment form submission
-        document.querySelectorAll('.CommentForm').forEach(form => {
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                const petitionId = this.getAttribute('data-petition-id');
-                const commentText = this.querySelector('[name="commentText"]').value;
-                // Implement your AJAX call here to post the comment to the server
-                alert(`Comment on petition ${petitionId}: ${commentText}`);
-                // Clear the comment input field after submission
-                this.querySelector('[name="commentText"]').value = '';
+
+            // Handle comment form submission
+            document.querySelectorAll('.CommentForm').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    const petitionId = this.getAttribute('data-petition-id');
+                    const commentText = this.querySelector('[name="commentText"]').value;
+                    alert(`Comment on petition ${petitionId}: ${commentText}`);
+                    this.querySelector('[name="commentText"]').value = '';
+                });
             });
+
+
+
+
+
+
+
         });
+
+
+
+        // Toggle comments display
+        $('.toggleCommentsButton').click(function () {
+            var $commentsSection = $(this).next('.commentsSection');
+            $commentsSection.toggle(); // Toggle the visibility of the comments section
+            $(this).text($commentsSection.is(':visible') ? 'Hide Comments' : 'Show Comments');
+        });
+
     </script>
 
 

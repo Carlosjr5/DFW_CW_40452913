@@ -59,9 +59,15 @@ namespace DFW_CW_40452913.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            var petitions = _context.Petitions.ToList(); // Retrieves all petitions from the database
-            return View(petitions); // Passes the petitions to the view
+            var petitions = _context.Petitions.ToList(); // Retrieves all petitions
+            var comments = _context.Comments.ToList(); // Retrieves all comments
+
+            // Create a tuple containing both lists
+            var model = new Tuple<List<Petition>, List<Comment>>(petitions, comments);
+
+            return View(model); // Pass the tuple as the model to the view
         }
+
 
 
         [AllowAnonymous]
@@ -82,16 +88,37 @@ namespace DFW_CW_40452913.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Petition model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Petition model, IFormFile image)
         {
-           
-                _context.Petitions.Add(model);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
-        
+            if (ModelState.IsValid)
+            {
+                if (image != null && image.Length > 0)
+                {
+                    // Construct the file path
+                    var fileName = Path.GetFileName(image.FileName);
+                    var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "images/petitions", fileName);
+
+                    // Save the file
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(fileStream);
+                    }
+
+                    // Save the path in the database
+                    model.ImageUrl = $"/images/petitions/{fileName}";
+                    _context.Add(model);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    // Handle cases where the image is not provided
+                    ModelState.AddModelError("", "Image is required.");
+                }
+            }
+            return View(model);
         }
-
-
 
 
 
@@ -139,28 +166,28 @@ namespace DFW_CW_40452913.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> About()
         {
-            ViewBag.Message = "This is a petition page with an aim to achieve a consensus between humanity.";
-
-            var petitions = await _context.Petitions.ToListAsync(); // Fetch petitions from the database
-            return View(petitions); // Pass petitions to the view
+            var petitions = await _context.Petitions.Include(p => p.Comments).ToListAsync();
+            var comments = await _context.Comments.ToListAsync();
+            var model = Tuple.Create(petitions, comments);
+            return View(model);
         }
 
-   
 
 
-        [AllowAnonymous] 
+
+        [AllowAnonymous]
         public ActionResult Contact()
         {
             return View();
         }
 
-        [AllowAnonymous] 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [AllowAnonymous] 
+        [AllowAnonymous]
         public IActionResult PetitionList()
         {
             return View();
@@ -168,15 +195,20 @@ namespace DFW_CW_40452913.Controllers
 
 
         [AllowAnonymous]
-        public IActionResult PetitionDetails(int id)
+        public async Task<IActionResult> PetitionDetails(int id)
         {
-            var petition = GetPetitionById(id);
+            var petition = await _context.Petitions
+                .Include(p => p.Comments)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (petition == null)
             {
                 return NotFound();
             }
+
             return View(petition);
         }
+
 
         private Petition GetPetitionById(int id)
         {
@@ -184,7 +216,7 @@ namespace DFW_CW_40452913.Controllers
         }
 
 
-        [AllowAnonymous] 
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
@@ -194,5 +226,58 @@ namespace DFW_CW_40452913.Controllers
         {
             return _context.Petitions.ToList();
         }
+
+
+
+        [AllowAnonymous]
+        public async Task<IActionResult> IndexComments()
+        {
+            var petitions = await _context.Petitions
+                                          .Include(p => p.Comments)
+                                          .ToListAsync();
+
+            // Example: Null-check and initialize if necessary
+            // This is just illustrative; normally EF Core handles this automatically
+            foreach (var petition in petitions)
+            {
+                petition.Comments ??= new List<Comment>();
+            }
+
+            return View(petitions);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(int petitionId, string commentText)
+        {
+            var petition = await _context.Petitions.FindAsync(petitionId);
+            if (petition == null)
+            {
+                TempData["Message"] = "Petition not found.";
+                return NotFound();
+            }
+
+            var comment = new Comment
+            {
+                Text = commentText,
+                PetitionId = petitionId,
+                DatePosted = DateTime.Now
+            };
+
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            // For JSON response
+            //return Json(new { text = comment.Text, datePosted = comment.DatePosted.ToString("dd MMM yyyy") });
+
+            TempData["Message"] = "Comment added successfully.";
+            return Redirect($"/Home/About#{petitionId}");
+
+
+        }
+
+
+
+
     }
 }

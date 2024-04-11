@@ -2,7 +2,9 @@ using DFW_CW_40452913.Controllers;
 using DFW_CW_40452913.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-    
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Http.Features;
+
 public class Program
 {
   
@@ -24,7 +26,22 @@ public class Program
 
 
         builder.Services.AddControllersWithViews();
-       
+
+
+        builder.Services.Configure<KestrelServerOptions>(options =>
+        {
+            options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(10);
+            options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(10);
+        });
+
+        builder.Services.Configure<FormOptions>(x =>
+        {
+            x.ValueLengthLimit = int.MaxValue;
+            x.MultipartBodyLengthLimit = int.MaxValue; // Adjust according to your needs
+        });
+
+
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())

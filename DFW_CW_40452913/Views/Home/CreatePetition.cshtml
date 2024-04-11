@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model List<string>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +14,9 @@
         <h2 style="margin-bottom:5%">Create a petition</h2>
 
 
-        <form asp-controller="Home" asp-action="Create" method="post" enctype="multipart/form-data">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            
+ 
             <div class="form-group">
                 <small class="text-muted">Title</small>
                 <input type="text" name="Title" class="form-control" required>
@@ -22,19 +26,22 @@
 
                 <small class="text-muted">Description</small>
                 <textarea name="Description" class="form-control" required></textarea>
-            </div>
-
+            </div> 
             <div class="form-group">
-                <input type="file" name="file" class="form-control">
-                <small class="text-muted">Upload the petition image from your computer.</small>
+                <label for="image">Image</label>
+                <input type="file" name="image" class="form-control" />
             </div>
-
-          
-        
             <button type="submit" class="btn btn-primary">Create Petition</button>
+
         </form>
 
+
+
+
+
     </div>
+
+
 </body>
 
 
