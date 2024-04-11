@@ -55,18 +55,14 @@
                         </div>
 
                         <br />
+               
                         <div>
-                            <button class="LikeButton" data-petition-id="@petition.Id">Like</button>
-
-                            <button class="ShareButton" onclick="sharePetition('@petition.Title')">Share</button>
+                            <button class="LikeButton" data-petition-id="@petition.Id">Sign Petition</button>
+                            <button class="ShareButton" data-petition-id="@petition.Id">Share</button>
                         </div>
 
                         <br />
-                        <form action="AddComment" method="post">
-                            <input type="hidden" name="petitionId" value="@petition.Id" />
-                            <input type="text" placeholder="Leave a comment..." name="commentText" />
-                            <button type="submit">Comment</button>
-                        </form>
+                      
 
                         @{
                             var petitionComments = Model.Item2.Where(c => c.PetitionId == petition.Id).ToList();
@@ -75,6 +71,12 @@
                         <button class="toggleCommentsButton">Show Comments</button>
 
                         <div class="commentsSection">
+                            <form action="AddComment" method="post">
+                                <input type="hidden" name="petitionId" value="@petition.Id" />
+                                <input type="text" placeholder="Leave a comment..." name="commentText" />
+                                <button type="submit">Comment</button>
+                            </form>
+
                             @* Filter comments for the current petition. *@
 
                             @if (petitionComments.Any())
@@ -98,9 +100,23 @@
             </div>
         </div>
 
+
+        <div id="shareModal" style="display:none;">
+            <p>Share this petition:</p>
+            <button id="facebookShare">Facebook</button>
+            <button id="XShare">X</button>
+            <input type="text" id="shareLink" readonly>
+            <button onclick="copyToClipboard()">Copy Link</button>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    
+
     </allmain>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    @*Petition Panel Section*@
     <script>
         //Check for admin.
         var isAdmin = @isAdmin.ToString().ToLower();
@@ -138,7 +154,7 @@
             function renderPetitions(petitions) {
                 petitionsList.innerHTML = ''; // Clear previous content
 
-                petitions.forEach(petition => {
+                  petitions.forEach(petition => {
                     var petitionItem = document.createElement('div');
                     var petitionId = petition.Title.replace(/\s+/g, '-').toLowerCase(); // Generate ID from petition title
                     petitionItem.id = petitionId; // Set ID for the petition item
@@ -171,7 +187,6 @@
                                     </div>`;
                         }
 
-                        // Include the commentsHtml in your petitionItem.innerHTML
                         petitionItem.innerHTML = `
                                     <div class="Image">
                                         <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
@@ -181,7 +196,7 @@
                                     </div>
                                     <div class="Description">${petition.Description.replace(/\n/g, "<br>")}</div>
                                     <div class="interactions">
-                                        <button class="LikeButton" data-petition-id="${petition.Id}">Like</button>
+                                        <button class="LikeButton" data-petition-id="${petition.Id}">Sign Petition</button>
                                         <button class="ShareButton">Share</button>
                                         <button class="toggleCommentsButton">Show Comments</button>
                                     </div>
@@ -219,68 +234,18 @@
                 });
             }
 
-            // Function to search petitions
-            function searchPetitions() {
-                var searchInput = document.getElementById('searchInput').value.toLowerCase();
-                var filteredPetitions = samplePetitions.filter(petition =>
-                    petition.Title.toLowerCase().includes(searchInput) || petition.Description.toLowerCase().includes(searchInput)
-                );
-                renderPetitions(filteredPetitions);
-            }
+            
 
-            // Initial render
-            var hasVoted = getCookie('voted');
-            renderPetitions(samplePetitions);
+          
+           
 
-            // Listen for Enter key press event in search input
-            document.getElementById('searchInput').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    searchPetitions();
-                }
-            });
+    </script>
 
 
 
-            // Example function for the Share button
-            function sharePetition(title) {
-                alert(`Share this petition: ${title}`);
-            }
-
-            // Attaching event listener to the common parent element
-            document.getElementById('petitionsList').addEventListener('click', function (event) {
-                // Checking if the clicked element is a Like button
-                if (event.target.classList.contains('LikeButton')) {
-                    const button = event.target;
-                    const petitionId = button.getAttribute('data-petition-id');
-
-                    // Check if the user has already voted for this petition using cookies
-                    if (getCookie('voted_' + petitionId)) {
-                        button.disabled = true; // Optionally disable the button
-                        alert('You have already liked this petition.');
-                        return; // Exit if already voted
-                    }
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '/Home/IncrementVote', // Adjust the URL as necessary
-                        data: { petitionId: petitionId },
-                        success: function (data) {
-                            if (data.success) {
-                                button.textContent = 'Like (' + data.votes + ')';
-                                // Mark that the user has voted for this petition
-                                setCookie('voted_' + petitionId, 'true', 365);
-                                button.disabled = true; // Optionally disable the button after voting
-                            } else {
-                                alert('Error updating the vote: ' + data.message);
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            alert('Error updating the vote. Please try again later.');
-                        }
-                    });
-                }
-            });
-
+    @*Comment Section*@
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
 
             // Handle comment form submission
@@ -295,21 +260,71 @@
             });
 
 
+            // Toggle comments display
+            $('.toggleCommentsButton').click(function () {
+                var $commentsSection = $(this).next('.commentsSection');
+                $commentsSection.toggle(); // Toggle the visibility of the comments section
+                $(this).text($commentsSection.is(':visible') ? 'Hide Comments' : 'Show Comments');
+            });
+
+        });
+    </script>
 
 
 
 
 
+    @*Share Section*@
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Event delegation for handling clicks on dynamically added Share buttons
+            document.addEventListener('click', function (event) {
+                if (event.target && event.target.className.includes('ShareButton')) {
+                    // Simulate generating a share link based on the petition's data
+                    const petitionId = event.target.getAttribute('data-petition-id');
+                    const petitionLink = `https://localhost:7284/Home/About/${petitionId}`;
+                    showShareModal(petitionLink);
+                }
+            });
+
+            function showShareModal(link) {
+                document.getElementById('shareLink').value = link; // Set the link in the modal
+                document.getElementById('shareModal').style.display = 'block'; // Show the modal
+            }
+
+            // Set up social media sharing links
+            document.getElementById('facebookShare').addEventListener('click', function () {
+                const url = document.getElementById('shareLink').value;
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+            });
+
+            document.getElementById('XShare').addEventListener('click', function () {
+
+                const url = document.getElementById('shareLink').value;
+                window.open(`https://X.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank');
+            });
+
+            // Copy to clipboard function
+            window.copyToClipboard = function () {
+                const copyText = document.getElementById('shareLink');
+                copyText.select();
+                document.execCommand('copy');
+                alert('Link copied to clipboard');
+            };
+
+            // Close modal function
+            window.closeModal = function () {
+                document.getElementById('shareModal').style.display = 'none';
+            };
         });
 
 
 
-        // Toggle comments display
-        $('.toggleCommentsButton').click(function () {
-            var $commentsSection = $(this).next('.commentsSection');
-            $commentsSection.toggle(); // Toggle the visibility of the comments section
-            $(this).text($commentsSection.is(':visible') ? 'Hide Comments' : 'Show Comments');
-        });
+
+
+
+
+
 
     </script>
 
