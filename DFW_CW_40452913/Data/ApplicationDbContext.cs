@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using DFW_CW_40452913.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
@@ -9,7 +10,7 @@ namespace DFW_CW_40452913.Data
         public DbSet<Petition> Petitions { get; set; }
         public string UserName { get; internal set; }
         public DbSet<Comment> Comments { get; set; }
-
+        public DbSet<UserVote> UserVotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -22,6 +23,11 @@ namespace DFW_CW_40452913.Data
                 .HasMany(p => p.Comments)
                 .WithOne(c => c.Petition)
                 .HasForeignKey(c => c.PetitionId);
+
+            builder.Entity<Petition>(entity =>
+            {
+                entity.Property(e => e.Votes).HasDefaultValue(0);
+            });
 
         }
     }

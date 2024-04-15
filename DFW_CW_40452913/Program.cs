@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
+using DFW_CW_40452913.Middleware;
+using DFW_CW_40452913.Middleware.DFW_CW_40452913.Middleware;
 
 public class Program
 {
@@ -40,6 +42,7 @@ public class Program
             x.MultipartBodyLengthLimit = int.MaxValue; // Adjust according to your needs
         });
 
+   
 
 
         var app = builder.Build();
@@ -129,8 +132,10 @@ public class Program
             }
         }
 
+        //Deletion Proccess
+        app.UseDeletePetitionMiddleware();
 
-    
+
 
         app.Run();
 

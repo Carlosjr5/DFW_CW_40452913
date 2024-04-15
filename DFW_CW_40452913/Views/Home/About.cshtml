@@ -29,11 +29,16 @@
 </head>
 
 <body>
+    @Html.AntiForgeryToken()
     <allmain aria-labelledby="title">
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search petitions...">
             <button onclick="searchPetitions()">Search</button>
         </div>
+
+        <form id="voteForm" style="display:none;">
+            @Html.AntiForgeryToken()
+        </form>
 
         <div class="allpetition-details">
             <div id="petitionsList">
@@ -55,18 +60,29 @@
                         </div>
 
                         <br />
-               
                         <div>
-                            <button class="LikeButton" data-petition-id="@petition.Id">Sign Petition</button>
+
+                            <button class="voteButton" data-petition-id="@petition.Id">Vote</button>
+                            <br />
+                            <span id="voteCount-@petition.Id">@petition.Votes</span>
+                        </div>
+                        <br />
+                        <div>
                             <button class="ShareButton" data-petition-id="@petition.Id">Share</button>
                         </div>
+                        <br />
+                        <div>
+                            @if (isAdmin)
+                            {
+                                <button type="button" onclick="deletePetition(@petition.Id)" style="background-color: red; color: white;">Delete Petition</button>
+                            }
+                        </div>
+                   
 
                         <br />
-                      
 
                         @{
                             var petitionComments = Model.Item2.Where(c => c.PetitionId == petition.Id).ToList();
-
                         }
                         <button class="toggleCommentsButton">Show Comments</button>
 
@@ -89,12 +105,7 @@
                                     </div>
                                 }
                             }
-
                         </div>
-                        @if (isAdmin)
-                        {
-                            <button class="DeleteButton" data-petition-id="@petition.Id">Delete</button>
-                        }
                     </div>
                 }
             </div>
@@ -109,7 +120,7 @@
             <button onclick="copyToClipboard()">Copy Link</button>
             <button onclick="closeModal()">Close</button>
         </div>
-    
+
 
     </allmain>
 
@@ -117,137 +128,146 @@
 
 
     @*Petition Panel Section*@
+
     <script>
         //Check for admin.
         var isAdmin = @isAdmin.ToString().ToLower();
 
-
-
         document.addEventListener('DOMContentLoaded', function () {
-            // Function to set a cookie
-            function setCookie(name, value, days) {
-                var expires = "";
-                if (days) {
-                    var date = new Date();
-                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                    expires = "; expires=" + date.toUTCString();
-                }
-                document.cookie = name + "=" + (value || "") + expires + "; path=/";
-            }
 
-            // Function to get a cookie
-            function getCookie(name) {
-                var nameEQ = name + "=";
-                var ca = document.cookie.split(';');
-                for (var i = 0; i < ca.length; i++) {
-                    var c = ca[i];
-                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+
+            document.body.addEventListener('click', function (event) {
+                if (event.target.classList.contains('voteButton')) {
+                    var petitionId = event.target.getAttribute('data-petition-id');
+
+                    // AJAX request to the server
+                    fetch('/Home/Vote', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest', // For ASP.NET Core to recognize AJAX request
+                        },
+                        body: JSON.stringify({ id: petitionId })  // Send the petition ID
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Thank you for your vote!');
+                                var voteCountSpan = document.getElementById('voteCount-' + petitionId);
+                                voteCountSpan.textContent = 'Votes: ' + data.votes;  // Update the vote count display
+                            } else {
+                                alert(data.message);  // Show error message
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Failed to process vote.');
+                        });
                 }
-                return null;
-            }
+            });
 
 
             var petitionsList = document.getElementById('petitionsList');
-
             // Function to render petitions
             function renderPetitions(petitions) {
                 petitionsList.innerHTML = ''; // Clear previous content
 
-                  petitions.forEach(petition => {
+                petitions.forEach(petition => {
                     var petitionItem = document.createElement('div');
                     var petitionId = petition.Title.replace(/\s+/g, '-').toLowerCase(); // Generate ID from petition title
                     petitionItem.id = petitionId; // Set ID for the petition item
                     petitionItem.classList.add('petition-item');
 
-                    //  var formattedDate = new Date(petition.DateCreated).toLocaleString();
-
-                    // Example of iterating over petitions and their comments
-                    petitions.forEach(petition => {
-                        var petitionItem = document.createElement('div');
-                        petitionItem.classList.add('petition-item');
-
-                        // Construct comments HTML
-                        let commentsHtml = '';
-                        if (petition.Comments && petition.Comments.length > 0) {
-                            commentsHtml = '<div class="commentsSection" style="display:none;">';
-                            petition.Comments.forEach(comment => {
-                                commentsHtml += `
-                                            <div class="comment">
-                                                <p>${comment.Text}</p>
-                                                <small>Posted on ${new Date(comment.DatePosted).toLocaleDateString()}</small>
-                                            </div>
-                                        `;
-                            });
+                    // Construct comments HTML
+                    let commentsHtml = '';
+                    if (petition.Comments && petition.Comments.length > 0) {
+                        commentsHtml = '<div class="commentsSection" style="display:none;">';
+                        petition.Comments.forEach(comment => {
                             commentsHtml += `
-                                    <form class="CommentForm" data-petition-id="${petition.Id}">
-                                            <input type="text" placeholder="Leave a comment..." name="commentText" />
-                                            <button type="submit">Comment</button>
-                                     </form>
-                                    </div>`;
-                        }
-
-                        petitionItem.innerHTML = `
-                                    <div class="Image">
-                                        <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
-                                    </div>
-                                    <div class="PetitionTitle">
-                                        <span class="Title">${petition.Title}</span>
-                                    </div>
-                                    <div class="Description">${petition.Description.replace(/\n/g, "<br>")}</div>
-                                    <div class="interactions">
-                                        <button class="LikeButton" data-petition-id="${petition.Id}">Sign Petition</button>
-                                        <button class="ShareButton">Share</button>
-                                        <button class="toggleCommentsButton">Show Comments</button>
-                                    </div>
-                                    <div>
-                                    <button class="toggleCommentsButton">Show Comments</button>
-
-                                    ${commentsHtml}
+                                    <div class="comment">
+                                        <p>${comment.Text}</p>
+                                        <small>Posted on ${new Date(comment.DatePosted).toLocaleDateString()}</small>
                                     </div>
                                 `;
-
-                        // Append petitionItem to the container
-                        document.getElementById('petitionsList').appendChild(petitionItem);
-                    });
-
-                    // Add event listener to vote button if the user has not already voted
-                    if (!hasVoted) {
-                        var yesButton = petitionItem.querySelector('.YesButton');
-                        yesButton.addEventListener('click', function () {
-                            var counter = this.nextElementSibling;
-                            var count = parseInt(counter.textContent) + 1;
-                            counter.textContent = count;
-                            setCookie('voted', 'true', 365); // Set cookie to indicate that the user has voted
-                            this.textContent = 'Voted'; // Change button text to indicate that the user has voted
-                            this.disabled = true; // Disable the button after voting
                         });
+                        commentsHtml += `
+                                <form class="CommentForm" data-petition-id="${petition.Id}">
+                                    <input type="text" placeholder="Leave a comment..." name="commentText" />
+                                    <button type="submit">Comment</button>
+                                </form>
+                            </div>`;
                     }
 
-                    // Add event listener to delete button if the user is an admin
-                    if (isAdmin) {
-                        var deleteButton = petitionItem.querySelector('.DeleteButton');
-                        deleteButton.addEventListener('click', function () {
-                            petitionItem.remove();
-                        });
-                    }
+                    petitionItem.innerHTML = `
+                        <div class="Image">
+                            <img src="${petition.ImageUrl}" alt="Petition Image" class="petition-image" />
+                        </div>
+                        <div class="PetitionTitle">
+                            <span class="Title">${petition.Title}</span>
+                        </div>
+                        <div class="Description">${petition.Description.replace(/\n/g, "<br>")}</div>
+                        <div class="interactions">
+                            <button class="voteButton" data-petition-id="${petition.Id}">Sign Petition</button>
+                            <span id="voteCount-${petition.Id}">Votes: ${petition.Votes}</span>
+                            <button class="ShareButton">Share</button>
+                            ${isAdmin ? `<button class="DeleteButton" data-petition-id="${petition.Id}">Delete</button>` : ''}
+                            <button class="toggleCommentsButton">Show Comments</button>
+                            <form id="deletePetitionForm-${petition.Id}" style="display: none;" method="post">
+                                <input type="hidden" name="id" value="${petition.Id}" />
+                                <button type="button" onclick="deletePetition(${petition.Id})">Confirm Delete</button>
+                            </form>
+                        </div>
+                        <div>
+                            <button class="toggleCommentsButton">Show Comments</button>
+                            ${commentsHtml}
+                        </div>
+                    `;
+
+
+                    // Append petitionItem to the container
+                    petitionsList.appendChild(petitionItem);
+
+                
+                
                 });
             }
 
-            
-
-          
-           
-
+            // Call the renderPetitions function with the initial data
+            renderPetitions(initialPetitionsData);
+        });
     </script>
 
 
+    <script>
+        function deletePetition(petitionId) {
+            fetch(`/Home/DeletePetition?id=${petitionId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Petition deleted successfully.');
+                        // Reload the page or redirect
+                        window.location.href = '/'; // Assuming '/' is the path to the Index view
+                    } else {
+                        alert('Error deleting petition.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to delete petition.');
+                });
+        }
+
+
+    </script>
 
     @*Comment Section*@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-
-
             // Handle comment form submission
             document.querySelectorAll('.CommentForm').forEach(form => {
                 form.addEventListener('submit', function (event) {
@@ -259,19 +279,14 @@
                 });
             });
 
-
             // Toggle comments display
             $('.toggleCommentsButton').click(function () {
                 var $commentsSection = $(this).next('.commentsSection');
                 $commentsSection.toggle(); // Toggle the visibility of the comments section
                 $(this).text($commentsSection.is(':visible') ? 'Hide Comments' : 'Show Comments');
             });
-
         });
     </script>
-
-
-
 
 
     @*Share Section*@
@@ -299,7 +314,6 @@
             });
 
             document.getElementById('XShare').addEventListener('click', function () {
-
                 const url = document.getElementById('shareLink').value;
                 window.open(`https://X.com/intent/tweet?url=${encodeURIComponent(url)}`, '_blank');
             });
@@ -317,19 +331,10 @@
                 document.getElementById('shareModal').style.display = 'none';
             };
         });
-
-
-
-
-
-
-
-
-
     </script>
 
 
-
+ 
 </body>
 <footer class="apfooter">
     &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

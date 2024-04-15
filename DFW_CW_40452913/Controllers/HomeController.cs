@@ -121,48 +121,6 @@ namespace DFW_CW_40452913.Controllers
         }
 
 
-
-
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken] // Ensure this is included if you're using anti-forgery tokens for security.
-        //public async Task<IActionResult> Create(string Title, string Description, IFormFile Image)
-        //{
-        //    try
-        //    {
-        //        // Retrieve the current user's email to use as the author.
-        //        // Ensure the user is logged in; otherwise, UserManager won't be able to retrieve the user.
-        //        var user = await _userManager.GetUserAsync(User);
-        //        var userEmail = user?.Email;
-
-        //        // Create a new petition object.
-        //        var petition = new Petition
-        //        {
-        //            Title = Title,
-        //            Description = Description,
-        //            Author = userEmail, // Assuming the author is the current logged-in user's email.
-        //            DateCreated = DateTime.UtcNow // Set the current time as the creation time.
-        //        };
-
-        //        // Optionally handle the image file here if needed.
-
-        //        // Add the new petition to the context and save changes to the database.
-        //        _context.Petitions.Add(petition);
-        //        await _context.SaveChangesAsync();
-
-        //        // Redirect to a confirmation page or back to the list of petitions, for example.
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the error.
-        //        _logger.LogError($"Error creating petition: {ex.Message}");
-        //        // Return an error view or display a user-friendly error message.
-        //        return View("Error");
-        //    }
-        //}
-
         [AllowAnonymous]
         public async Task<IActionResult> About()
         {
@@ -171,6 +129,50 @@ namespace DFW_CW_40452913.Controllers
             var model = Tuple.Create(petitions, comments);
             return View(model);
         }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> Vote([FromBody] Petition model)
+        {
+            if (model == null || model.Id == 0)
+            {
+                return Json(new { success = false, message = "Invalid petition ID." });
+            }
+
+            var petition = await _context.Petitions.FirstOrDefaultAsync(p => p.Id == model.Id);
+            if (petition == null)
+            {
+                return Json(new { success = false, message = "Petition not found." });
+            }
+
+            petition.Votes += 1;  // Increment the vote count
+            await _context.SaveChangesAsync();  // Save the changes to the database
+
+            return Json(new { success = true, votes = petition.Votes });  // Return the updated vote count
+        }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeletePetition(int id)
+        {
+            var petition = await _context.Petitions.FindAsync(id);
+            if (petition == null)
+            {
+                return NotFound();
+            }
+
+            _context.Petitions.Remove(petition);
+            await _context.SaveChangesAsync();
+
+           // TempData["Message"] = "Petition deleted successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+
 
 
 
