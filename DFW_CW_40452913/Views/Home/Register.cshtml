@@ -1,24 +1,25 @@
-﻿<div class="col-md-12">
-    <form id="registerForm" method="post" action="/Identity/Account/Register" novalidate="novalidate">
+﻿@model DFW_CW_40452913.Controllers.RegisterViewModel
+
+<div class="col-md-12">
+    <form asp-action="Register" method="post">
         <h2>Create a new account.</h2>
         <hr>
-
         <div class="form-floating mb-3">
-            <input class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" type="email" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Input_Email" name="Input.Email" value="">
-            <label for="Input_Email">Email</label>
-            <span class="text-danger field-validation-valid" data-valmsg-for="Input.Email" data-valmsg-replace="true"></span>
+            <input asp-for="Email" class="form-control" autocomplete="username" placeholder="Email">
+            <label asp-for="Email">Email</label>
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-floating mb-3">
-            <input class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" type="password" data-val="true" data-val-length="The Password must be at least 6 and at max 100 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Input_Password" maxlength="100" name="Input.Password">
-            <label for="Input_Password">Password</label>
-            <span class="text-danger field-validation-valid" data-valmsg-for="Input.Password" data-valmsg-replace="true"></span>
+            <input asp-for="Password" class="form-control" autocomplete="new-password" placeholder="Password">
+            <label asp-for="Password">Password</label>
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
         <div class="form-floating mb-3">
-            <input class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" type="password" data-val="true" data-val-equalto="The password and confirmation password do not match." data-val-equalto-other="*.Password" id="Input_ConfirmPassword" name="Input.ConfirmPassword">
-            <label for="Input_ConfirmPassword">Confirm Password</label>
-            <span class="text-danger field-validation-valid" data-valmsg-for="Input.ConfirmPassword" data-valmsg-replace="true"></span>
+            <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" placeholder="Confirm Password">
+            <label asp-for="ConfirmPassword">Confirm Password</label>
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
-        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8JXGJl071HNClKyj-bIknppO-yPzCgKqDNPhZZUXGoxgkD8HQgQ3MvvB_Ga2ez3HNAWhckNk_SFHpHTSa26AUxyLgYNAqbEuvdLBV0mAeO27AWpRJEZ-4xKGM7avNBsAj9q0kO37rIR0Kc1jU1wOTfg">
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        @Html.AntiForgeryToken()
     </form>
 </div>

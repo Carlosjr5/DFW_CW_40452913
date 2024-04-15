@@ -33,6 +33,37 @@ namespace DFW_CW_40452913.Controllers
             return View();
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -55,6 +86,14 @@ namespace DFW_CW_40452913.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+
+
+
+
+
+
 
         [AllowAnonymous]
         public IActionResult Index()
@@ -130,8 +169,6 @@ namespace DFW_CW_40452913.Controllers
             return View(model);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> Vote([FromBody] Petition model)
         {
@@ -152,9 +189,6 @@ namespace DFW_CW_40452913.Controllers
             return Json(new { success = true, votes = petition.Votes });  // Return the updated vote count
         }
 
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
@@ -172,10 +206,6 @@ namespace DFW_CW_40452913.Controllers
            // TempData["Message"] = "Petition deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
-
-
-
-
 
         [AllowAnonymous]
         public ActionResult Contact()
@@ -195,7 +225,6 @@ namespace DFW_CW_40452913.Controllers
             return View();
         }
 
-
         [AllowAnonymous]
         public async Task<IActionResult> PetitionDetails(int id)
         {
@@ -211,12 +240,10 @@ namespace DFW_CW_40452913.Controllers
             return View(petition);
         }
 
-
         private Petition GetPetitionById(int id)
         {
             return _context.Petitions.FirstOrDefault(p => p.Id == id);
         }
-
 
         [AllowAnonymous]
         public IActionResult Error()
@@ -228,8 +255,6 @@ namespace DFW_CW_40452913.Controllers
         {
             return _context.Petitions.ToList();
         }
-
-
 
         [AllowAnonymous]
         public async Task<IActionResult> IndexComments()
@@ -247,7 +272,6 @@ namespace DFW_CW_40452913.Controllers
 
             return View(petitions);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> AddComment(int petitionId, string commentText)

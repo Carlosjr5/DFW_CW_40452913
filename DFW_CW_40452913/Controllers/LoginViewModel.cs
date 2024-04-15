@@ -14,5 +14,7 @@ namespace DFW_CW_40452913.Controllers
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+
+
     }
 }
