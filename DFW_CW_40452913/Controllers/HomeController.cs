@@ -130,6 +130,13 @@ namespace DFW_CW_40452913.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Petition model, IFormFile image)
         {
+            // Check if the user is authenticated and registered
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || !User.IsInRole("user"))
+            {
+                // Optionally, redirect unregistered or not properly role-assigned users
+                return RedirectToAction("Register");
+            }
             if (ModelState.IsValid)
             {
                 if (image != null && image.Length > 0)
