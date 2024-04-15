@@ -61,7 +61,11 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
-        app.UseAuthentication();
+
+        app.UseAuthorization();
+
+
+
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>
@@ -69,13 +73,15 @@ public class Program
             endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+        });
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
             endpoints.MapControllerRoute(
                 name: "admin",
                 pattern: "{controller=Admin}/{action=Index}/{id?}");
-            endpoints.MapRazorPages();
-            endpoints.MapControllers();
         });
-
 
         app.MapRazorPages();
 

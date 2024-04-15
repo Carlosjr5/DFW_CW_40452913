@@ -65,11 +65,7 @@ namespace DFW_CW_40452913.Controllers
             await _userManager.SetLockoutEnabledAsync(user, true);
             await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
 
-            //Check json file status
-            // return Json(new { success = true });
-
-            // Redirect to the previous page
-            return RedirectToAction(nameof(AdminIndex));
+                return Json(new { success = true });
         }
 
      
