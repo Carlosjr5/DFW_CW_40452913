@@ -32,10 +32,14 @@
 <body>
     @Html.AntiForgeryToken()
     <allmain aria-labelledby="title">
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search petitions...">
-            <button onclick="searchPetitions()">Search</button>
-        </div>
+        <form method="get" action="@Url.Action("About", "Home")">
+            <div class="search-bar">
+                <input type="text" id="searchInput" name="searchQuery" placeholder="Search petitions..." value="@ViewBag.CurrentSearchQuery">
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+
 
         <form id="voteForm" style="display:none;">
             @Html.AntiForgeryToken()
@@ -213,7 +217,7 @@
         });
     </script>
 
-
+    @*Delete Petition Section*@
     <script>
         function deletePetition(petitionId) {
             fetch(`/Home/DeletePetition?id=${petitionId}`, {
@@ -268,10 +272,8 @@
     @*Share Section*@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Event delegation for handling clicks on dynamically added Share buttons
             document.addEventListener('click', function (event) {
                 if (event.target && event.target.className.includes('ShareButton')) {
-                    // Simulate generating a share link based on the petition's data
                     const petitionId = event.target.getAttribute('data-petition-id');
                     const petitionLink = `https://localhost:7284/Home/About/${petitionId}`;
                     showShareModal(petitionLink);
@@ -336,7 +338,7 @@
         function handleVote(petitionId) {
             var hasVotedCookie = getCookie('voted-' + petitionId);
             if (hasVotedCookie) {
-              //  alert('You have already voted for this petition.');
+                alert('You have already voted for this petition.');
                 return; // Stop the function if the cookie is found
             }
 

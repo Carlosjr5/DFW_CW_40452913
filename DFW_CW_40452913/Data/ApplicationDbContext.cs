@@ -18,7 +18,7 @@ namespace DFW_CW_40452913.Data
 
             builder.Entity<Petition>().ToTable("Petition");
 
-            // Define the relationship between Petitions and Comments
+            // Defining the relationship between Petitions and Comments
             builder.Entity<Petition>()
                 .HasMany(p => p.Comments)
                 .WithOne(c => c.Petition)

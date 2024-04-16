@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Http.Features;
-using DFW_CW_40452913.Middleware;
-using DFW_CW_40452913.Middleware.DFW_CW_40452913.Middleware;
 
 public class Program
 {
@@ -45,7 +43,7 @@ public class Program
         builder.Services.Configure<FormOptions>(x =>
         {
             x.ValueLengthLimit = int.MaxValue;
-            x.MultipartBodyLengthLimit = int.MaxValue; // Adjust according to your needs
+            x.MultipartBodyLengthLimit = int.MaxValue;
         });
 
    
@@ -105,41 +103,6 @@ public class Program
                 }
             }
         }
-
-        //Creating new temporary user.
-        using (var scope = app.Services.CreateScope())
-        {
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-            string email = "carlos23@gmail.com";
-            string password = "Admin1234!";
-
-            if (await userManager.FindByEmailAsync(email) == null)
-            {
-                var user = new IdentityUser
-                {
-                    UserName = email,
-                    Email = email
-                };
-
-                var result = await userManager.CreateAsync(user, password);
-
-                if (result.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(user, "admin");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        Console.WriteLine(error.Description);
-                    }
-                }
-            }
-        }
-
-        //Deletion Proccess
-        app.UseDeletePetitionMiddleware();
 
 
 
