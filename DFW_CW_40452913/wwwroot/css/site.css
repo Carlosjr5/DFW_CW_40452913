@@ -8,7 +8,7 @@ body {
 }
 
 .bw-mode {
-    background-color: black;
+    background-color: #212529;
     color: aliceblue;
 }
 
@@ -509,4 +509,41 @@ allmain {
     border: 1px solid #ddd;
     z-index: 1000; 
 
+}
+
+
+
+
+/*Login Section*/
+
+.container {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.card {
+    background-color: #f7f7f7;
+    border: none;
+}
+
+.form-control {
+    border-radius: 0.25rem;
+    padding: 1rem;
+    font-size: 16px;
+}
+
+.btn-primary {
+    padding: 10px;
+    font-size: 18px;
+    background-color: #0056b3;
+    border: none;
+    border-radius: 0.25rem;
+}
+
+    .btn-primary:hover {
+        background-color: #004494;
+    }
+
+.card-title {
+    font-size: 24px;
 }

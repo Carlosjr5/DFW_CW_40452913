@@ -26,12 +26,43 @@ namespace DFW_CW_40452913.Controllers
             _signInManager = signInManager;
         }
 
-
         [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+     
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+    
 
         [AllowAnonymous]
         [HttpPost]
