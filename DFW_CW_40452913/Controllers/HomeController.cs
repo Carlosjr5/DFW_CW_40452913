@@ -242,8 +242,28 @@ namespace DFW_CW_40452913.Controllers
         [AllowAnonymous]
         public IActionResult PetitionList()
         {
-            return View();
+            ViewData["CurrentSortOrder"] = "default"; // Default sorting
+            var petitions = _context.Petitions.OrderByDescending(p => p.Votes).ToList();
+            return View(petitions);
         }
+
+        public IActionResult SortedPetitions(string sortBy)
+        {
+            IEnumerable<Petition> petitions;
+            ViewData["CurrentSortOrder"] = sortBy; // Set the current sort order
+
+            if (sortBy == "leastVoted")
+            {
+                petitions = _context.Petitions.OrderBy(p => p.Votes).ToList();
+            }
+            else // Default to "mostVoted"
+            {
+                petitions = _context.Petitions.OrderByDescending(p => p.Votes).ToList();
+            }
+            return View("PetitionList", petitions);
+        }
+
+
 
 
         [AllowAnonymous]

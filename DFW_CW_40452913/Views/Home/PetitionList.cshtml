@@ -1,92 +1,91 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title</title>
+    <title>Petitions List</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <allmain aria-labelledby="title">
-          <div class="filter-wrapper">
-                <label for="sortSelect">Sort by:</label>
-                <select id="sortSelect">
-                    <option value="mostVoted">Most Voted</option>
-                    <option value="leastVoted">Least Voted</option>
-                </select>
-            </div>
+        <div class="filter-wrapper">
+            <label for="sortSelect">Sort by:</label>
+            <select id="sortSelect" onchange="sortPetitions(this.value)">
+                <option value="default">Default</option>
+                <option value="mostVoted">Most Voted</option>
+                <option value="leastVoted">Least Voted</option>
+            </select>
+        </div>
         <div class="table-wrapper">
-          
-            <table class="table @ViewData["BWMode"]">
-                <thead class="bw-mode">
+            <table class="table">
+                <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Votes</th>
-                    </tr>
+                         @if (User.IsInRole("admin"))
+                        {
+                            <th>Title</th>
+                            <th>Votes</th>
+                            <th>Actions</th>
+                        }
+                        else{
+                            <th>Title</th>
+                            <th>Votes</th>
+                            }
+                        </tr>
                 </thead>
-                <tbody id="petitionsList"></tbody>
+                <tbody>
+                    @foreach (var petition in Model)
+                    {  @if (User.IsInRole("admin"))
+                        {
+                            <tr>
+                                <td><a href="/Home/PetitionDetails/@petition.Id">@petition.Title</a></td>
+                                <td>@petition.Votes</td>
+                                <td><button style="background-color:darkred; color:white" onclick="deletePetition(@petition.Id)">Delete</button></td>
+                            </tr>
+                        }else{
+                            <tr>
+                                <td><a href="/Home/PetitionDetails/@petition.Id">@petition.Title</a></td>
+                                <td>@petition.Votes</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
             </table>
         </div>
     </allmain>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var samplePetitions = [
-                {
-                    "Title": "Urgent Call to Action: Protect Our Planet, Save Our Environment!",
-                    "Author": "Weshul Clen",
-                    "Votes": 10
-                },
-                {
-                    "Title": "Equal Education for All",
-                    "Author": "Charles Murray",
-                    "Votes": 5
-                },
-                {
-                    "Title": "Demand Peace: Stop War and Conflict Worldwide",
-                    "Author": "Jack Burns",
-                    "Votes": 8
-                }
-            ];
+        function sortPetitions(sortBy) {
+            const url = `/Home/SortedPetitions?sortBy=${sortBy}`;
+            window.location.href = url;
+        }
+     </script>
+    <script>
+ 
 
-            var petitionsList = document.getElementById('petitionsList');
-
-            function renderPetitions(petitions) {
-                petitionsList.innerHTML = '';
-                petitions.forEach(petition => {
-                    var petitionRow = document.createElement('tr');
-                    petitionRow.innerHTML = `
-                                <td><a href="/Home/About#${petition.Title.replace(/\s+/g, '-').toLowerCase()}">${petition.Title}</a></td>
-                                <td>${petition.Author}</td>
-                                <td>${petition.Votes}</td>
-                            `;
-                    petitionsList.appendChild(petitionRow);
-                });
+        function deletePetition(petitionId) {
+            if (confirm('Are you sure you want to delete this petition?')) {
+                fetch(`/Home/DeletePetition?id=${petitionId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Petition deleted successfully.');
+                            window.location.reload(); // Reload the page to update the list
+                        } else {
+                            alert('Error deleting petition.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to delete petition.');
+                    });
             }
-
-            function sortPetitions(sortBy) {
-                if (sortBy === 'mostVoted') {
-                    var sortedPetitions = samplePetitions.slice().sort((a, b) => b.Votes - a.Votes);
-                    renderPetitions(sortedPetitions);
-                } else if (sortBy === 'leastVoted') {
-                    var sortedPetitions = samplePetitions.slice().sort((a, b) => a.Votes - b.Votes);
-                    renderPetitions(sortedPetitions);
-                }
-            }
-
-            document.getElementById('sortSelect').addEventListener('change', function (event) {
-                var sortBy = event.target.value;
-                sortPetitions(sortBy);
-            });
-
-            // Initial rendering
-            renderPetitions(samplePetitions);
-        });
+        }
     </script>
-
 </body>
 <footer class="plfooter">
     &copy; 2024 - iPétition - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

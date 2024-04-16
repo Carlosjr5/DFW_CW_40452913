@@ -2,6 +2,7 @@
 
 @{
     var isAdmin = User.IsInRole("admin");
+    var isUser = User.IsInRole("user");
 }
 
 @if (TempData["Message"] != null)
@@ -61,16 +62,23 @@
 
                         <br />
                         <div>
-                            
-                            <button class="voteButton" data-petition-id="@petition.Id" onclick="handleVote(@petition.Id)">Vote</button>                           <br />
-                            <span id="voteCount-@petition.Id">@petition.Votes</span>
+                            @if (isAdmin || isUser)
+                            {
+                                <button class="voteButton" data-petition-id="@petition.Id" onclick="handleVote(@petition.Id)">Vote</button>   
+                                <br />
+                                <span id="voteCount-@petition.Id"><strong>Petition Voted by @petition.Votes Users!</strong></span>
+                            }else{
+                                <span id="voteCount-@petition.Id"><strong>Petition Voted by @petition.Votes Users!</strong></span>
+                                <br />
+                                <small >
+                                <a class="text-muted" class="nav-link Home" asp-area="" asp-controller="Home" asp-action="Login">Login to Vote & Create Petitions!</a>
+                                </small>
+                            }
                         </div>
+                        <br />
                         <br />
                         <div>
                             <button class="ShareButton" data-petition-id="@petition.Id">Share</button>
-                        </div>
-                        <br />
-                        <div>
                             @if (isAdmin)
                             {
                                 <button type="button" onclick="deletePetition(@petition.Id)" style="background-color: red; color: white;">Delete Petition</button>
