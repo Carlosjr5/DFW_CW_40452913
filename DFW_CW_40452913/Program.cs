@@ -26,6 +26,12 @@ public class Program
 
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
 
         builder.Services.AddControllersWithViews();
 
@@ -64,7 +70,7 @@ public class Program
 
         app.UseAuthorization();
 
-
+        app.UseSession();
 
         app.UseAuthorization();
 

@@ -91,13 +91,7 @@ namespace DFW_CW_40452913.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Petition model, IFormFile image)
         {
-            // Check if the user is authenticated and registered
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || !User.IsInRole("user"))
-            {
-                // Optionally, redirect unregistered or not properly role-assigned users
-                return RedirectToAction("Register");
-            }
+        
             if (ModelState.IsValid)
             {
                 if (image != null && image.Length > 0)
@@ -142,22 +136,40 @@ namespace DFW_CW_40452913.Controllers
         [HttpPost]
         public async Task<IActionResult> Vote([FromBody] Petition model)
         {
-            if (model == null || model.Id == 0)
+            if (model == null || model.Id <= 0)
             {
                 return Json(new { success = false, message = "Invalid petition ID." });
             }
 
+            // Ensure unique session for each user or browser
+            var sessionId = HttpContext.Session.GetString("SessionID") ?? Guid.NewGuid().ToString();
+            HttpContext.Session.SetString("SessionID", sessionId);
+
+            // Check if the user has already voted
+            var hasVoted = HttpContext.Session.GetString("Voted_" + model.Id);
+            if (!string.IsNullOrEmpty(hasVoted))
+            {
+                return Json(new { success = false, message = "You have already voted for this petition." });
+            }
+
+            // Retrieve the petition from the database
             var petition = await _context.Petitions.FirstOrDefaultAsync(p => p.Id == model.Id);
             if (petition == null)
             {
                 return Json(new { success = false, message = "Petition not found." });
             }
 
-            petition.Votes += 1;  // Increment the vote count
-            await _context.SaveChangesAsync();  // Save the changes to the database
+            // Increment votes and save changes
+            petition.Votes++;
+            await _context.SaveChangesAsync();
 
-            return Json(new { success = true, votes = petition.Votes });  // Return the updated vote count
+            // Mark in the session that the user has voted
+            HttpContext.Session.SetString("Voted_" + model.Id, "true");
+
+            return Json(new { success = true, votes = petition.Votes });
         }
+
+
 
 
 
