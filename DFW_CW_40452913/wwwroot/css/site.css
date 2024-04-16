@@ -52,7 +52,7 @@ section {
     font-size: 15px;
     font-family: Inter;
     text-decoration: none;
-    margin-right:auto;
+    margin-right: auto;
 }
 
     .nav-link:hover {
@@ -82,9 +82,6 @@ section {
 
 
 /* Create Petition */
-.container {
-    margin-top: 50px;
-}
 
 .petition-form {
     padding: 20px;
@@ -143,47 +140,61 @@ allmain {
 
 
 /*Search Bar*/
-.search-bar{
-    margin-bottom:92px;
+.search-bar {
+    margin-bottom: 92px;
 }
+
 
 /*All Petitions*/
 
+.petitions-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap to the next line */
+    justify-content: center; /* Centers items horizontally */
+    gap: 20px; /* Adds space between items */
+    padding: 20px; /* Padding around the entire container */
+}
+
 .petition-item {
-     /* Initial height */
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
     transition: min-height 0.3s ease;
+    max-width: 1293px;
 }
 
 
-
-.petition-item:hover {
-    min-height: 400px; /* Expanded height when hovered */
-}
+    .petition-item:hover {
+        min-height: 400px; /* Expanded height when hovered */
+    }
 
     /*Fixed Image issue*/
     .petition-item .Image {
         margin-top: 23px;
         margin-bottom: 23px;
     }
-    .petition-item .Image img {
 
-         width: 450px; /* Sets width to auto to adjust based on original dimensions */
-         max-width: 100%; /* Sets maximum width to prevent images from exceeding their container */
-         height: auto; /* Ensure the aspect ratio of the images is maintained */
-         object-fit: cover; /* This property ensures the image covers the area without stretching. */
-    }
+        .petition-item .Image img {
+            width: 450px; /* Sets width to auto to adjust based on original dimensions */
+            max-width: 100%; /* Sets maximum width to prevent images from exceeding their container */
+            height: auto; /* Ensure the aspect ratio of the images is maintained */
+            object-fit: cover; /* This property ensures the image covers the area without stretching. */
+        }
 
 
     .petition-item .PetitionTitle {
         position: relative;
         font-size: 23px;
-        padding: 10px;
-        margin-bottom: 23px;
+        line-height: 1.4;
+        margin: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
 .PetitionTitle a {
@@ -191,7 +202,7 @@ allmain {
 }
 
 .bw-mode .PetitionTitle a {
-    color: white; 
+    color: white;
 }
 
     .bw-mode .PetitionTitle a:hover {
@@ -200,33 +211,35 @@ allmain {
 
 
 .petition-item .Description {
-    flex: 1; /* Allow the description to take up the remaining space */
-    opacity: 0; /* Initially hide the description */
+    opacity: 0;
     transition: opacity 0.3s ease;
-    max-height: 0; /* Initially hide the description */
-    text-align: center; 
+    padding: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-wrap: break-word;
+    max-height: 0;
+    transition: max-height 0.3s ease-in-out;
     margin-left: 5%;
     margin-right: 5%;
+    text-align: center;
 }
 
-    .petition-item:hover .Description {
-        text-align: center; /* Center the text within the description */
-        opacity: 1; /* Reveal the description when the petition item is hovered */
-        max-height: 100%; /* Expand the description height */
-    }
+.petition-item:hover .Description {
+    text-align: center; /* Center the text within the description */
+    opacity: 1; /* Reveal the description when the petition item is hovered */
+    max-height: 100%; /* Expand the description height */
+}
 
-    /*Number of votes*/
-    .petition-item .VoteYes {
-        position: relative;
-        color: black;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 23px;
-        margin-bottom: 23px;
-        
-     
-    }
+/*Number of votes*/
+.petition-item .VoteYes {
+    position: relative;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 23px;
+    margin-bottom: 23px;
+}
 
 .LikeButton {
     background-color: blanchedalmond;
@@ -236,55 +249,13 @@ allmain {
     color: white;
 }
 
-/*When voted*/
-.petition-item .VoteYes .Yes {
-    width: 35px;
-    height: 38.5px;
-    background: green;
-    border: 1px solid rgba(0, 87, 19, 0.64);
-    border-radius: 4px;
-}
-
-
-
     .petition-item .ShareButton {
         background-color: darkslategrey;
         color: white;
         border: none;
-        border-radius: 5px;
+        border-radius: 9px;
         cursor: pointer;
     }
-
-.petition-item .CommentButton {
-    background-color: dodgerblue;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 23px;
-    margin-bottom: 23px;
-}
-
-
-    /*Admin Delete Petition Btn */
-
-    .petition-item .DeleteButton {
-        top: 23px;
-        right: 190px;
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 23px;
-        margin-bottom: 23px;
-    }
-
-.petition-item .DeleteButton:hover {
-     background-color: #c82333;
-}
-
-
 
 
 /* Footer Styles */
@@ -294,6 +265,7 @@ allmain {
     text-align: center;
     margin-top: 35%;
 }
+
 .cfooter {
     position: center;
     text-align: center;
@@ -359,7 +331,7 @@ allmain {
 .table-wrapper {
     overflow-x: auto; /* Enable horizontal scrolling */
     max-width: 100%; /* Ensure the table wrapper doesn't exceed the viewport width */
-    justify-content:center;
+    justify-content: center;
 }
 
 .table {
@@ -447,16 +419,16 @@ allmain {
 
 
 /*Filter Petition List Panel*/
-.filter-wrapper{
-    margin-bottom:5%;
+.filter-wrapper {
+    margin-bottom: 5%;
 }
 
 
 
 /* Comments Section */
 .commentsSection {
-    margin-right:13%;
-    margin-left:13%;
+    margin-right: 13%;
+    margin-left: 13%;
     background-color: #f9f9f9;
     border-radius: 8px;
     padding: 10px;
@@ -485,30 +457,51 @@ allmain {
 
 
 .toggleCommentsButton {
-    background-color: lightblue; 
+    background-color: lightblue;
     padding: 8px 12px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
     font-size: 16px;
 }
 
-.toggleCommentsButton:hover {
-    background-color: #0056b3; /* Darker shade for hover effect */
-}
+    .toggleCommentsButton:hover {
+        background-color: #0056b3; /* Darker shade for hover effect */
+    }
 
 
+/* Share Section*/
 #shareModal {
     position: fixed;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-color: dimgrey;
+    background-color: darkslategrey;
     padding: 20px;
     border: 1px solid #ddd;
-    z-index: 1000; 
+    z-index: 1000;
+}
 
+.social-share-button {
+    background-color: transparent; 
+    border: none; 
+    color: white;
+    padding: 20px 20px; 
+    background-size: 24px 24px; 
+    background-repeat: no-repeat; 
+    background-position: 10px 50%; 
+    text-indent: 40px; 
+    display: inline-block;
+    cursor: pointer; 
+}
+
+#facebookShare {
+    background-image: url('/images/facebook_logo.png');
+}
+
+#XShare {
+    background-image: url('/images/x_logo.png.png');
 }
 
 

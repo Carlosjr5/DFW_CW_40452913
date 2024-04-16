@@ -61,7 +61,7 @@
 
                         <br />
                         <div>
-
+                            
                             <button class="voteButton" data-petition-id="@petition.Id" onclick="handleVote(@petition.Id)">Vote</button>                           <br />
                             <span id="voteCount-@petition.Id">@petition.Votes</span>
                         </div>
@@ -112,13 +112,15 @@
 
 
         <div id="shareModal" style="display:none;">
-            <p>Share this petition:</p>
-            <button id="facebookShare">Facebook</button>
-            <button id="XShare">X</button>
+            <button id="facebookShare" class="social-share-button" style="background-image: url('/images/facebook_logo.png');"></button>
+            <button id="XShare" class="social-share-button" style="background-image: url('/images/x_logo.png');"></button>
+            <br /><br />
             <input type="text" id="shareLink" readonly>
             <button onclick="copyToClipboard()">Copy Link</button>
+            <br /><br />
             <button onclick="closeModal()">Close</button>
         </div>
+
 
 
     </allmain>
@@ -132,38 +134,6 @@
         var isAdmin = @isAdmin.ToString().ToLower();
 
         document.addEventListener('DOMContentLoaded', function () {
-
-
-            document.body.addEventListener('click', function (event) {
-                if (event.target.classList.contains('voteButton')) {
-                    var petitionId = event.target.getAttribute('data-petition-id');
-
-                    // AJAX request to the server
-                    fetch('/Home/Vote', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest', // For ASP.NET Core to recognize AJAX request
-                        },
-                        body: JSON.stringify({ id: petitionId })  // Send the petition ID
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('Thank you for your vote!');
-                                var voteCountSpan = document.getElementById('voteCount-' + petitionId);
-                                voteCountSpan.textContent = 'Votes: ' + data.votes;  // Update the vote count display
-                            } else {
-                                alert(data.message);  // Show error message
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Failed to process vote.');
-                        });
-                }
-            });
-
 
             var petitionsList = document.getElementById('petitionsList');
             // Function to render petitions
