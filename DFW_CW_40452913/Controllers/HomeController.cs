@@ -119,6 +119,7 @@ namespace DFW_CW_40452913.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> Create(Petition model, IFormFile image)
         {
         
