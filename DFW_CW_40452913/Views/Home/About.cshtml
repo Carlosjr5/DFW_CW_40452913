@@ -70,9 +70,9 @@
                             {
                                 <button class="voteButton" data-petition-id="@petition.Id" onclick="handleVote(@petition.Id)">Vote</button>   
                                 <br />
-                                <span id="voteCount-@petition.Id"><strong>Petition Voted by @petition.Votes Users!</strong></span>
+                                <span id="voteCount-@petition.Id">Petition Voted by @petition.Votes Users!</span>
                             }else{
-                                <span id="voteCount-@petition.Id"><strong>Petition Voted by @petition.Votes Users!</strong></span>
+                                <span id="voteCount-@petition.Id">Petition Voted by @petition.Votes Users!</span>
                                 <br />
                                 <small >
                                 <a class="text-muted" class="nav-link Home" asp-area="" asp-controller="Home" asp-action="Login">Login to Vote & Create Petitions!</a>
@@ -188,7 +188,7 @@
                         <div class="Description">${petition.Description.replace(/\n/g, "<br>")}</div>
                         <div class="interactions">
                             <button class="voteButton" data-petition-id="${petition.Id}">Sign Petition</button>
-                            <span id="voteCount-${petition.Id}">Votes: ${petition.Votes}</span>
+                            <span id="voteCount-${petition.Id}">Petition Voted by ${petition.Votes} Users!</strong></span>
                             <button class="ShareButton">Share</button>
                             ${isAdmin ? `<button class="DeleteButton" data-petition-id="${petition.Id}">Delete</button>` : ''}
                             <button class="toggleCommentsButton">Show Comments</button>
@@ -355,7 +355,7 @@
                     if (data.success) {
                         alert('Thank you for your vote!');
                         var voteCountSpan = document.getElementById('voteCount-' + petitionId);
-                        voteCountSpan.textContent = 'Votes: ' + data.votes;
+                        voteCountSpan.textContent = 'Petition Voted by ' + data.votes + " Users!";
                         setCookie('voted-' + petitionId, 'true', 365); // Set a cookie to prevent further votes
                     } else {
                         alert(data.message);
