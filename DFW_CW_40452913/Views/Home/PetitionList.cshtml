@@ -37,7 +37,7 @@
                     {  @if (User.IsInRole("admin"))
                         {
                             <tr>
-                                <td><a href="/Home/PetitionDetails/@petition.Id">@petition.Title</a></td>
+                                <td><a href="/Home/About/@petition.Id">@petition.Title</a></td>
                                 <td>@petition.Votes</td>
                                 <td><button style="background-color:darkred; color:white" onclick="deletePetition(@petition.Id)">Delete</button></td>
                             </tr>
