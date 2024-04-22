@@ -220,29 +220,28 @@
     @*Delete Petition Section*@
     <script>
         function deletePetition(petitionId) {
-            fetch(`/Home/DeletePetition?id=${petitionId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Petition deleted successfully.');
-                        // Reload the page or redirect
-                        window.location.href = '/'; // Assuming '/' is the path to the Index view
-                    } else {
-                        alert('Error deleting petition.');
+            if (confirm('Are you sure you want to delete this petition?')) {
+                fetch(`/Home/DeletePetition?id=${petitionId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to delete petition.');
-                });
+                    .then(response => {
+                        if (response.ok) {
+                            alert('Petition deleted successfully.');
+                            window.location.reload();
+                        } else {
+                            alert('Error deleting petition.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to delete petition.');
+                    });
+            }
         }
-
-
     </script>
 
     @*Comment Section*@
